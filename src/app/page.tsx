@@ -1,3 +1,3 @@
 export default function Home() {
-  return <>Z.com</>;
+  return <div>Z.com</div>;
 }
