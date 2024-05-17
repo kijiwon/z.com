@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import zlog from "../../public/zlogo.png";
-import styles from "../app/page.module.css";
+import zLog from "../../../public/zlogo.png";
+import styles from "@/app/page.module.css";
 
 export default function Home() {
   return (
     <>
       <div className={styles.left}>
-        <Image src={zlog} alt="logo" />
+        <Image src={zLog} alt="logo" />
       </div>
       <div className={styles.right}>
         <h1>지금 일어나고 있는 일</h1>

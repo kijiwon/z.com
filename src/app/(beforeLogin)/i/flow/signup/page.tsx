@@ -1,3 +1,3 @@
-export default function Page() {
-  return <div>Sign Up</div>;
+export default function Home() {
+  return <main>회원가입 모달</main>;
 }
