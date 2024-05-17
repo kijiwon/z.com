@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "@/app/(beforeLogin)/@modal/i/flow/login/login.module.css";
+import styles from "@/app/(beforeLogin)/@modal/(.)i/flow/login/login.module.css";
 
 export default function Home() {
   const [id, setId] = useState();
