@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import zLogo from "../../../public/zlogo.png";
 import NavMenu from "./_component/NavMenu";
+import LogoutButton from "./_component/LogoutButton";
 
 export default function AfterLoginLayout({
   children,
@@ -21,8 +22,14 @@ export default function AfterLoginLayout({
               </div>
             </Link>
             <nav>
-              <NavMenu />
+              <ul>
+                <NavMenu />
+              </ul>
+              <Link href="/compose/tweet" className={styles.postButton}>
+                게시하기
+              </Link>
             </nav>
+            <LogoutButton />
           </div>
         </section>
       </header>
