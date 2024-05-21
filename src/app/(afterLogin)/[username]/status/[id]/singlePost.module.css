@@ -12,6 +12,7 @@
 
 .header {
   display: flex;
+  width: inherit;
   height: 53px;
   align-items: center;
 }
