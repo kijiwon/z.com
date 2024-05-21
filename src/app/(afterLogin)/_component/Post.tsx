@@ -4,12 +4,14 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // -> dayjs의 fromNow를 사용할 수 있도록 돕는 플러그인
 import "dayjs/locale/ko"; // 영어를 한국어로 변환
 import ActionButtons from "./ActionButtons";
+import PostArticle from "./PostArticle";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
 export default function Post() {
   const target = {
+    postId: 1,
     User: {
       id: "elonmusk",
       nickname: "Elon Musk",
@@ -17,11 +19,11 @@ export default function Post() {
     },
     content: "클론코딩 라이브로 하니 너무 힘들어요 ㅠㅠ",
     createdAt: new Date(),
-    Images: [],
+    Images: [] as any[],
   };
 
   return (
-    <article className={style.post}>
+    <PostArticle post={target}>
       <div className={style.postWrapper}>
         <div className={style.postUserSection}>
           <Link href={`/${target.User.id}`} className={style.postUserImage}>
@@ -46,6 +48,6 @@ export default function Post() {
           <ActionButtons />
         </div>
       </div>
-    </article>
+    </PostArticle>
   );
 }
