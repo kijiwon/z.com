@@ -1,11 +1,12 @@
-import Link from "next/link";
 import style from "./post.module.css";
+import Link from "next/link";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime"; // -> dayjs의 fromNow를 사용할 수 있도록 돕는 플러그인
-import "dayjs/locale/ko"; // 영어를 한국어로 변환
-import ActionButtons from "./ActionButtons";
-import PostArticle from "./PostArticle";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/ko";
+import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
+import PostArticle from "@/app/(afterLogin)/_component/PostArticle";
 import { faker } from "@faker-js/faker";
+import PostImages from "./PostImages";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -26,12 +27,12 @@ export default function Post({ noImage }: Props) {
     createdAt: new Date(),
     Images: [] as any[],
   };
-
-  // 랜덤하게 이미지 추가하기
-  // noImage가 아닌 경우에만 이미지 추가
   if (Math.random() > 0.5 && !noImage) {
     target.Images.push(
-      { imageId: 1, link: faker.image.urlLoremFlickr() } // 랜덤 이미지 생성
+      { imageId: 1, link: faker.image.urlLoremFlickr() },
+      { imageId: 2, link: faker.image.urlLoremFlickr() },
+      { imageId: 3, link: faker.image.urlLoremFlickr() },
+      { imageId: 4, link: faker.image.urlLoremFlickr() }
     );
   }
 
@@ -57,15 +58,8 @@ export default function Post({ noImage }: Props) {
             </span>
           </div>
           <div>{target.content}</div>
-          <div className={style.postImageSection}>
-            {target.Images && target.Images.length > 0 && (
-              <Link
-                href={`/${target.User.id}/status/${target.postId}/photo/${target.Images[0].imageId}`}
-                className={style.postImageSection}
-              >
-                <img src={target.Images[0]?.link} alt="" />
-              </Link>
-            )}
+          <div>
+            <PostImages post={target} />
           </div>
           <ActionButtons />
         </div>
