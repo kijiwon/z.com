@@ -107,21 +107,29 @@
   flex-grow: 1;
 }
 
+.rightSection {
+  display: none;
+}
 .rightSectionInner {
   height: 100%;
-  width: 990px;
+  width: 600px;
   display: flex;
   justify-content: space-between;
+}
+@media all and (min-width: 1024px) {
+  .rightSection {
+    display: inline-block;
+    width: 350px;
+    height: 100%;
+  }
+  .rightSectionInner {
+    width: 990px;
+  }
 }
 
 .main {
   width: 600px;
   height: 200dvh;
-}
-
-.rightSection {
-  width: 350px;
-  height: 100%;
 }
 
 .followRecommend {
