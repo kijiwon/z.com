@@ -3,6 +3,12 @@ import style from "./chatRoom.module.css";
 import Link from "next/link";
 import BackButton from "../../_component/BackButton";
 import cx from "classnames";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/ko";
+
+dayjs.locale("ko");
+dayjs.extend(relativeTime);
 
 export default function ChatRoom() {
   const user = {
@@ -49,12 +55,18 @@ export default function ChatRoom() {
             return (
               <div className={cx(style.message, style.myMessage)} key={m.id}>
                 <div className={style.content}>{m.content}</div>
+                <div className={style.date}>
+                  {dayjs(m.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
+                </div>
               </div>
             );
           }
           return (
             <div className={cx(style.message, style.yourMessage)} key={m.id}>
               <div className={style.content}>{m.content}</div>
+              <div className={style.date}>
+                {dayjs(m.createdAt).format("YYYY년 MM월 DD일 A HH시 mm분")}
+              </div>
             </div>
           );
         })}
