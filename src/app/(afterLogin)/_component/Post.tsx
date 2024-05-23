@@ -10,7 +10,11 @@ import { faker } from "@faker-js/faker";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Post() {
+type Props = {
+  noImage?: boolean;
+};
+
+export default function Post({ noImage }: Props) {
   const target = {
     postId: 1,
     User: {
@@ -24,7 +28,8 @@ export default function Post() {
   };
 
   // 랜덤하게 이미지 추가하기
-  if (Math.random() > 0.5) {
+  // noImage가 아닌 경우에만 이미지 추가
+  if (Math.random() > 0.5 && !noImage) {
     target.Images.push(
       { imageId: 1, link: faker.image.urlLoremFlickr() } // 랜덤 이미지 생성
     );
