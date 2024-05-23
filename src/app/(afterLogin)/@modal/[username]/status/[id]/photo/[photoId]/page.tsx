@@ -26,12 +26,12 @@ export default function PhotoModal() {
         />
         <div className={style.buttonZone}>
           <div className={style.buttonInner}>
-            <ActionButtons />
+            <ActionButtons white />
           </div>
         </div>
       </div>
       <div className={style.commentZone}>
-        <Post noImage/>
+        <Post noImage />
         <CommentForm />
         <Post />
         <Post />
