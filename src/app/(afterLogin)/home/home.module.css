@@ -14,8 +14,8 @@
     width: 600px;
   }
 }
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .main {
     border-color: rgb(47, 51, 54);
   }
-}
+} */
