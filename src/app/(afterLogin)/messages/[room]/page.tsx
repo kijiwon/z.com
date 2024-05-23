@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import style from "./chatRoom.module.css";
 import Link from "next/link";
 import BackButton from "../../_component/BackButton";
+import cx from "classnames";
 
 export default function ChatRoom() {
   const user = {
@@ -46,14 +47,14 @@ export default function ChatRoom() {
         {messages.map((m, id) => {
           if (m.id === "zzionie") {
             return (
-              <div className={style.myMessage} key={m.id}>
-                {m.content}
+              <div className={cx(style.message, style.myMessage)} key={m.id}>
+                <div className={style.content}>{m.content}</div>
               </div>
             );
           }
           return (
-            <div className={style.yourMessage} key={m.id}>
-              {m.content}
+            <div className={cx(style.message, style.yourMessage)} key={m.id}>
+              <div className={style.content}>{m.content}</div>
             </div>
           );
         })}
