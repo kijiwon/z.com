@@ -11,7 +11,7 @@ function generateDate() {
 }
 const User = [
   { id: "elonmusk", nickname: "Elon Musk", image: "/yRsRRjGO.jpg" },
-  { id: "zerohch0", nickname: "제로초", image: "/5Udwvqim.jpg" },
+  { id: "zzionie", nickname: "찌오니", image: "/5Udwvqim.jpg" },
   { id: "leoturtle", nickname: "레오", image: faker.image.avatar() },
 ];
 const Posts = [];
@@ -20,6 +20,7 @@ export const handlers = [
   http.post("/api/login", () => {
     console.log("로그인");
     return HttpResponse.json(User[1], {
+      // http headers로 쿠키 설정
       headers: {
         "Set-Cookie": "connect.sid=msw-cookie;HttpOnly;Path=/",
       },
