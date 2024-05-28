@@ -10,11 +10,11 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .modalBackground {
     background-color: rgba(91, 112, 131, 0.4);
   }
-}
+} */
 .modal {
   background-color: rgb(var(--background-end-rgb));
   position: relative;
