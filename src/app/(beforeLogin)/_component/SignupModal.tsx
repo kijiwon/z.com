@@ -1,9 +1,11 @@
+import { useFormState, useFormStatus } from "react-dom";
 import onSubmit from "../_lib/signup";
 import BackButton from "./BackButton";
 import style from "./signup.module.css";
 
 export default function SignupModal() {
-  console.log("회원가입 모달");
+  const [state, formAction] = useFormState(onSubmit, { message: null });
+  const { pending } = useFormStatus();
   const submit = onSubmit;
 
   return (
@@ -14,7 +16,7 @@ export default function SignupModal() {
             <BackButton />
             <div>계정을 생성하세요.</div>
           </div>
-          <form action={submit}>
+          <form action={formAction}>
             <div className={style.modalBody}>
               <div className={style.inputDiv}>
                 <label className={style.inputLabel} htmlFor="id">
@@ -70,9 +72,15 @@ export default function SignupModal() {
               </div>
             </div>
             <div className={style.modalFooter}>
-              <button type="submit" className={style.actionButton}>
+              <button
+                type="submit"
+                className={style.actionButton}
+                // 회원가입 중 일때는 버튼 비활성화
+                disabled={pending}
+              >
                 가입하기
               </button>
+              <div className={style.error}>{state?.message}</div>
             </div>
           </form>
         </div>

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-export default async (formData: FormData) => {
+export default async (prevState: any, formData: FormData) => {
   console.log(formData);
   // formData 검증
   if (!formData.get("id")) {
