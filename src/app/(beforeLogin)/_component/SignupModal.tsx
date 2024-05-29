@@ -9,25 +9,20 @@ export default function SignupModal() {
     console.log(formData);
     // formData 검증
     if (!formData.get("id")) {
-      console.log("아이디 없음");
       return { message: "no_id" };
     }
     if (!formData.get("name")) {
-      console.log("이름 없음");
       return { message: "no_name" };
     }
     if (!formData.get("password")) {
-      console.log("비밀번호 없음");
       return { message: "no_password" };
     }
     if (!formData.get("image")) {
-      console.log("이미지 없음");
       return { message: "no_image" };
     }
     let shouldRedirect = false;
 
     try {
-      console.log("--회원가입 요청 보내기 전--");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,
         {
@@ -42,7 +37,6 @@ export default function SignupModal() {
       }
       console.log(await response.json());
       shouldRedirect = true;
-      console.log("--회원가입 요청 보낸 후--");
     } catch (error) {
       console.error(error);
       return { message: null };
