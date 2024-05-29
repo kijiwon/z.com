@@ -5,13 +5,16 @@ import { redirect } from "next/navigation";
 export default async (prevState: any, formData: FormData) => {
   console.log(formData);
   // formData 검증
-  if (!formData.get("id")) {
+  if (!formData.get("id") || !(formData.get("id") as string)?.trim()) {
     return { message: "no_id" };
   }
-  if (!formData.get("name")) {
+  if (!formData.get("name") || !(formData.get("name") as string)?.trim()) {
     return { message: "no_name" };
   }
-  if (!formData.get("password")) {
+  if (
+    !formData.get("password") ||
+    !(formData.get("password") as string)?.trim()
+  ) {
     return { message: "no_password" };
   }
   if (!formData.get("image")) {

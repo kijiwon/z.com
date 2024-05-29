@@ -1,7 +1,28 @@
+"use client";
+
 import { useFormState, useFormStatus } from "react-dom";
 import onSubmit from "../_lib/signup";
 import BackButton from "./BackButton";
 import style from "./signup.module.css";
+
+function showMessage(messasge: string | null | undefined) {
+  if (messasge === "no_id") {
+    return "아이디를 입력하세요.";
+  }
+  if (messasge === "no_name") {
+    return "닉네임을 입력하세요.";
+  }
+  if (messasge === "no_password") {
+    return "비밀번호를 입력하세요.";
+  }
+  if (messasge === "no_image") {
+    return "이미지를 업로드하세요.";
+  }
+  if (messasge === "user_exists") {
+    return "이미 사용 중인 아이디입니다.";
+  }
+  return "";
+}
 
 export default function SignupModal() {
   const [state, formAction] = useFormState(onSubmit, { message: null });
@@ -80,7 +101,7 @@ export default function SignupModal() {
               >
                 가입하기
               </button>
-              <div className={style.error}>{state?.message}</div>
+              <div className={style.error}>{showMessage(state?.message)}</div>
             </div>
           </form>
         </div>
