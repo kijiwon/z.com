@@ -2,8 +2,10 @@
 
 import { redirect } from "next/navigation";
 
-export default async (prevState: any, formData: FormData) => {
-  console.log(formData);
+export default async (
+  prevState: { message: string | null } | undefined,
+  formData: FormData
+) => {
   // formData 검증
   if (!formData.get("id") || !(formData.get("id") as string)?.trim()) {
     return { message: "no_id" };
