@@ -11,6 +11,15 @@ export const {
     signIn: "/i/flow/login",
     newUser: "/i/flow/signup",
   },
+  callbacks: {
+    // session이 없는 경우 로그인 페이지로 리다이렉트
+    async authorized({ request, auth }) {
+      if (!auth) {
+        return NextResponse.redirect(`http://localhost:3000/i/flow/login`);
+      }
+      return true;
+    },
+  },
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
