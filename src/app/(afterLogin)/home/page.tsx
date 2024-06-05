@@ -8,15 +8,7 @@ import PostForm from "./_component/PostForm";
 import Tab from "./_component/Tab";
 import TabProvider from "./_component/TabProvider";
 import style from "./home.module.css";
-
-async function getPostRecommends() {
-  const response = await fetch(`http://localhost:9090/api/postRecommends`, {
-    next: {
-      tags: ["posts", "recommends"],
-    },
-    cache: "no-store",
-  });
-}
+import { getPostRecommends } from "./_lib/getPostRecommends";
 
 export default async function Home() {
   const queryClient = new QueryClient();
@@ -33,12 +25,7 @@ export default async function Home() {
         <TabProvider>
           <Tab />
           <PostForm />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
+          <PostRecommends />
         </TabProvider>
       </HydrationBoundary>
     </main>
