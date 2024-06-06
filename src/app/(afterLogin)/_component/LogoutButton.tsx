@@ -7,11 +7,6 @@ import { signOut, useSession } from "next-auth/react";
 export default function LogoutButton() {
   const router = useRouter();
   const { data: me } = useSession();
-  // const me = {
-  //   id: "zzionie",
-  //   nickname: "찌오니",
-  //   image: "/5Udwvqim.jpg",
-  // };
 
   const onLogout = () => {
     signOut({ redirect: false }).then(() => {
@@ -26,11 +21,11 @@ export default function LogoutButton() {
   return (
     <button className={style.logOutButton} onClick={onLogout}>
       <div className={style.logOutUserImage}>
-        <img src={me.user?.image!} alt={me.user?.id!} />
+        <img src={me.user?.image!} alt={me.user?.email!} />
       </div>
       <div className={style.logOutUserName}>
         <div>{me.user?.name}</div>
-        <div>@{me.user?.id!}</div>
+        <div>@{me.user?.email!}</div>
       </div>
     </button>
   );

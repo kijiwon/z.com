@@ -1,6 +1,11 @@
 import style from "./profile.module.css";
 import Post from "../_component/Post";
 import BackButton from "@/app/(afterLogin)/_component/BackButton";
+import { Post as IPost } from "@/model/Post";
+
+type Props = {
+  post: IPost;
+};
 export default function Profile() {
   const user = {
     id: "zzionie",
@@ -25,12 +30,12 @@ export default function Profile() {
         <button className={style.followButton}>팔로우</button>
       </div>
       <div>
+        {/* <Post />
         <Post />
         <Post />
         <Post />
         <Post />
-        <Post />
-        <Post />
+        <Post /> */}
       </div>
     </main>
   );
