@@ -20,8 +20,9 @@ type Props = {
 };
 
 export default function PostArticle({ children, post }: Props) {
+  console.log("article");
   const router = useRouter();
-
+  console.log("--post article", post);
   const onClick = () => {
     router.push(`/${post.User.id}/status/${post.postId}`);
   };

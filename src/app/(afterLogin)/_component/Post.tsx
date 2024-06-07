@@ -18,9 +18,8 @@ type Props = {
 };
 
 export default function Post({ noImage, post }: Props) {
-  console.log(post);
-  const target: IPost = post;
-
+  const target = post;
+  console.log(target);
   if (Math.random() > 0.5 && !noImage) {
     target?.Images.push(
       { imageId: 1, link: faker.image.urlLoremFlickr() },
@@ -32,6 +31,7 @@ export default function Post({ noImage, post }: Props) {
 
   return (
     <PostArticle post={target}>
+      <h2>posts</h2>
       <div className={style.postWrapper}>
         <div className={style.postUserSection}>
           <Link href={`/${target.User.id}`} className={style.postUserImage}>
