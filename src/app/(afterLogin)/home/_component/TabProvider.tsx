@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useState } from "react";
 
 export const TabContext = createContext({
   tab: "rec",
@@ -10,7 +10,7 @@ export const TabContext = createContext({
 type Props = { children: ReactNode };
 
 export default function TabProvider({ children }: Props) {
-  const { tab, setTab } = useContext(TabContext);
+  const [tab, setTab] = useState("rec");
 
   return (
     <TabContext.Provider value={{ tab, setTab }}>
