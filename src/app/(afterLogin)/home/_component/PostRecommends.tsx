@@ -12,11 +12,5 @@ export default function PostRecommends() {
     staleTime: 60 * 1000,
   });
 
-  return data?.map((post) => {
-    // <Post key={post.postId} post={post} />;
-    <>
-      <h2>{post.postId}</h2>
-      <p>{post.User.id}</p>
-    </>;
-  });
+  return data?.map((post) => <Post key={post.postId} post={post} />);
 }
