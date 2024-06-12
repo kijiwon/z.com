@@ -6,9 +6,10 @@ import style from "./trendSection.module.css";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { getTrends } from "../_lib/getTrends";
+import { Hashtag } from "@/model/Hashtag";
 
 export default function TrendSection() {
-  const { data } = useQuery({
+  const { data } = useQuery<Hashtag[]>({
     queryKey: ["trends"],
     queryFn: getTrends,
     staleTime: 60 * 1000,
@@ -22,12 +23,10 @@ export default function TrendSection() {
     return (
       <div className={style.trendBg}>
         <div className={style.trend}>
-          <Trend />
-          <Trend />
-          <Trend />
-          <Trend />
-          <Trend />
-          <Trend />
+          <h3>나를 위한 트렌드</h3>
+          {data?.map((trend) => (
+            <Trend trend={trend} key={trend.tagId} />
+          ))}
         </div>
       </div>
     );
