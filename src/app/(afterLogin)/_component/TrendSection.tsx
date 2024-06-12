@@ -9,15 +9,16 @@ import { getTrends } from "../_lib/getTrends";
 import { Hashtag } from "@/model/Hashtag";
 
 export default function TrendSection() {
+  const { data: session } = useSession(); // 겹치는 변수는 이름을 바꿔줌
   const { data } = useQuery<Hashtag[]>({
     queryKey: ["trends"],
     queryFn: getTrends,
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
+    enabled: !!session?.user, // 로그인 상태에서만 접근할 수 있음
   });
 
   const pathname = usePathname();
-  const { data: session } = useSession(); // 겹치는 변수는 이름을 바꿔줌
   if (pathname === "/explore") return null;
   if (session?.user) {
     return (
