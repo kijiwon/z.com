@@ -31,7 +31,6 @@ export default function Post({ noImage, post }: Props) {
 
   return (
     <PostArticle post={target}>
-      <h2>posts</h2>
       <div className={style.postWrapper}>
         <div className={style.postUserSection}>
           <Link href={`/${target.User.id}`} className={style.postUserImage}>
