@@ -5,6 +5,9 @@ import {
 } from "@tanstack/react-query";
 import style from "./profile.module.css";
 import BackButton from "@/app/(afterLogin)/_component/BackButton";
+import { getUser } from "./_lib/getUser";
+import { getUserPosts } from "./_lib/getUserPosts";
+import UserPosts from "./_component/UserPosts";
 
 type Props = {
   params: { username: string };
@@ -47,12 +50,7 @@ export default async function Profile({ params }: Props) {
           <button className={style.followButton}>팔로우</button>
         </div>
         <div>
-          {/* <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post /> */}
+          <UserPosts username={username} />
         </div>
       </HydrationBoundary>
     </main>
