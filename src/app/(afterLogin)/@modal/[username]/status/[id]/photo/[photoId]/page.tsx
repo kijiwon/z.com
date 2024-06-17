@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-query";
 import { getSinglePost } from "@/app/(afterLogin)/[username]/status/[id]/_lib/getSinglePost";
 import { getComments } from "@/app/(afterLogin)/[username]/status/[id]/_lib/getComments";
+import ImageZone from "./_component/ImageZone";
 
 type Props = {
   params: { id: string };
@@ -36,18 +37,7 @@ export default async function PhotoModal({ params }: Props) {
     <div className={style.container}>
       <HydrationBoundary state={dehydratedState}>
         <PhotoModalCloseButton />
-        <div className={style.imageZone}>
-          <img src={photo.link} alt={photo.Post?.content} />
-          <div
-            className={style.image}
-            style={{ backgroundImage: `url(${photo.link})` }}
-          />
-          <div className={style.buttonZone}>
-            <div className={style.buttonInner}>
-              <ActionButtons white />
-            </div>
-          </div>
-        </div>
+        <ImageZone id={id} />
         <div className={style.commentZone}>
           <SinglePost id={id} noImage />
           <CommentForm />
