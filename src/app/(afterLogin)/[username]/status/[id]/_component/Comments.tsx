@@ -8,6 +8,7 @@ import Post from "@/app/(afterLogin)/_component/Post";
 type Props = {
   id: string;
 };
+
 export default function Comments({ id }: Props) {
   const queryClient = useQueryClient();
   const post = queryClient.getQueryData(["posts", id]);
