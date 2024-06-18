@@ -9,16 +9,20 @@ export default function RightSearchZone() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const onChangeAll = () => {
-    let url = `/search?q=${searchParams.get("q")}`;
-    if (searchParams.get("f")) {
-      // f가 있는 경우 url추가하기
-      url += `&f=${searchParams.get("f")}`;
-    }
-    router.replace(url);
+    // searchParams를 새로 생성해 url을 삭제하기 <- 기존 searchParams는 읽기 전용이기 때문에 수정할 수 없음
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.delete("pf");
+    // if (searchParams.has("f")) {
+    //   // f가 있는 경우 url추가하기
+    //   url += `&f=${searchParams.get("f")}`;
+    // }
+    router.replace(`/search?q=${searchParams.get("q")}`);
   };
   const onChangeFollow = () => {
-    let url = `/search?${searchParams.toString()}&pf=on`;
-    router.replace(url);
+    // searchParams를 새로 생성해 url을 추가하기
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("pf", "on");
+    router.replace(`/search?q=${searchParams.get("q")}&pf=on`);
   };
 
   if (pathname === "/explore") return null;
