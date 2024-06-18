@@ -16,13 +16,13 @@ export default function RightSearchZone() {
     //   // f가 있는 경우 url추가하기
     //   url += `&f=${searchParams.get("f")}`;
     // }
-    router.replace(`/search?q=${searchParams.get("q")}`);
+    router.replace(`/search?q=${newSearchParams.toString()}`);
   };
   const onChangeFollow = () => {
     // searchParams를 새로 생성해 url을 추가하기
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("pf", "on");
-    router.replace(`/search?q=${searchParams.get("q")}&pf=on`);
+    router.replace(`/search?q=${newSearchParams.toString()}`);
   };
 
   if (pathname === "/explore") return null;
