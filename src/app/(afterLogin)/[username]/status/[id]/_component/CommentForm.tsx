@@ -15,7 +15,6 @@ export default function CommentForm({ id }: Props) {
   const { data: me } = useSession();
   const queryClient = useQueryClient();
   const post = queryClient.getQueryData(["posts", id]);
-  console.log("post", post, id);
 
   const onClickButton = () => {};
   const onSubmit = () => {};

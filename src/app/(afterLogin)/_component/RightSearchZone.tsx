@@ -2,12 +2,24 @@
 
 import SearchForm from "./SearchForm";
 import style from "./rightSearchZone.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function RightSearchZone() {
   const pathname = usePathname();
-  const onChangeAll = () => {};
-  const onChangeFollow = () => {};
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const onChangeAll = () => {
+    let url = `/search?q=${searchParams.get("q")}`;
+    if (searchParams.get("f")) {
+      // f가 있는 경우 url추가하기
+      url += `&f=${searchParams.get("f")}`;
+    }
+    router.replace(url);
+  };
+  const onChangeFollow = () => {
+    let url = `/search?${searchParams.toString()}&pf=on`;
+    router.replace(url);
+  };
 
   if (pathname === "/explore") return null;
   // 검색어 입력시 검색 필터 영역 추가
