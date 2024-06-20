@@ -46,7 +46,7 @@ export const handlers = [
       },
     });
   }),
-  http.get("/api/postRecommends", ({ request }) => {
+  http.get("/api/postRecommends?lastId=0", ({ request }) => {
     const url = new URL(request.url);
     const cursor = parseInt(url.searchParams.get("cursor") as string) || 0;
     return HttpResponse.json([
