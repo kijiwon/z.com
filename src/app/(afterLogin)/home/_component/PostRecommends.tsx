@@ -15,13 +15,14 @@ export default function PostRecommends() {
     IPost[],
     Object,
     InfiniteData<IPost[]>,
-    [_1: string, _2: string]
+    [_1: string, _2: string],
+    number
   >({
     queryKey: ["posts", "recommends"],
     queryFn: getPostRecommends,
-    staleTime: 60 * 1000,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.at(-1)?.postId,
+    staleTime: 60 * 1000,
   });
 
   return data?.pages.map((page, i) => (
