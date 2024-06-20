@@ -46,8 +46,9 @@ export const handlers = [
       },
     });
   }),
-  http.get("/api/postRecommends?lastId=0", ({ request }) => {
+  http.get("/api/postRecommends?", ({ request }) => {
     const url = new URL(request.url);
+    // cursor의 기본값은 0
     const cursor = parseInt(url.searchParams.get("cursor") as string) || 0;
     return HttpResponse.json([
       {
