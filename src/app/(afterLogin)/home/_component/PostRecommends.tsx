@@ -16,7 +16,7 @@ export default function PostRecommends() {
     Object,
     InfiniteData<IPost[]>,
     [_1: string, _2: string],
-    number
+    number // initialPageParam 타입
   >({
     queryKey: ["posts", "recommends"],
     queryFn: getPostRecommends,
