@@ -52,7 +52,7 @@ export const handlers = [
     const cursor = parseInt(url.searchParams.get("cursor") as string) || 0;
     return HttpResponse.json([
       {
-        postId: cursor + 1,
+        postId: cursor + 1, // cursor에 따라 id가 변경됨
         User: User[0],
         content: `${cursor + 1} Z.com is so marvelous. I'm gonna buy that.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
