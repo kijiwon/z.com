@@ -3,6 +3,7 @@
 import { ChangeEventHandler, FormEventHandler, useRef, useState } from "react";
 import style from "./postForm.module.css";
 import { Session } from "@auth/core/types";
+import TextareaAutosize from "react-textarea-autosize";
 
 type Props = {
   me: Session | null;
@@ -35,7 +36,7 @@ export default function PostForm({ me }: Props) {
         </div>
       </div>
       <div className={style.postInputSection}>
-        <textarea
+        <TextareaAutosize
           value={content}
           onChange={onChange}
           placeholder="무슨 일이 일어나고 있나요?"
