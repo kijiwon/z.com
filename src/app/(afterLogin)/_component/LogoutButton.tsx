@@ -2,11 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import style from "./logoutButton.module.css";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { Session } from "@auth/core/types";
 
-export default function LogoutButton() {
+type Props = {
+  me: Session;
+};
+
+export default function LogoutButton({ me }: Props) {
   const router = useRouter();
-  const { data: me } = useSession();
 
   const onLogout = () => {
     signOut({ redirect: false }).then(() => {
