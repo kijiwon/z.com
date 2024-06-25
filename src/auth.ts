@@ -37,7 +37,7 @@ export const {
             }),
           }
         );
-
+        console.log(authResponse);
         if (!authResponse.ok) {
           return null;
         }
