@@ -6,6 +6,7 @@ import zLogo from "../../../public/zlogo.png";
 import NavMenu from "./_component/NavMenu";
 import LogoutButton from "./_component/LogoutButton";
 import TrendSection from "./_component/TrendSection";
+import FollowRecommend from "./_component/FollowRecommend";
 import RightSearchZone from "./_component/RightSearchZone";
 import { auth } from "@/auth";
 import RQProvider from "./_component/RQProvider";

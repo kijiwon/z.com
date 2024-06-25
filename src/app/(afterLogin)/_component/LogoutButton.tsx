@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import { Session } from "@auth/core/types";
 
 type Props = {
-  me: Session;
+  me: Session | null;
 };
 
 export default function LogoutButton({ me }: Props) {
