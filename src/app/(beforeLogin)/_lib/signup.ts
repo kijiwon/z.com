@@ -11,7 +11,10 @@ export default async (
   if (!formData.get("id") || !(formData.get("id") as string)?.trim()) {
     return { message: "no_id" };
   }
-  if (!formData.get("name") || !(formData.get("name") as string)?.trim()) {
+  if (
+    !formData.get("nickname") ||
+    !(formData.get("nickname") as string)?.trim()
+  ) {
     return { message: "no_name" };
   }
   if (
