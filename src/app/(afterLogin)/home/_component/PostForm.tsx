@@ -12,6 +12,9 @@ type Props = {
 export default function PostForm({ me }: Props) {
   const imageRef = useRef<HTMLInputElement>(null); // 에러 방지를 위해 타입 정의
   const [content, setContent] = useState("");
+  const [preview, setPreview] = useState<Array<string | ArrayBuffer | null>>(
+    []
+  );
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
   };
@@ -23,6 +26,29 @@ export default function PostForm({ me }: Props) {
   // 이미지 파일 추가 버튼
   const onClickButton = () => {
     imageRef.current?.click();
+  };
+
+  // 이미지 미리보기
+  const onUpload: ChangeEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    if (e.target.files) {
+      // 파일을 업로드한 경우
+      Array.from(e.target.files).forEach((file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          // DataURL로 읽고 난 다음 실행됨
+          setPreview((prevPreview) => {
+            const prev = [...prevPreview];
+            prev[index] = reader.result;
+            return prev;
+          });
+        };
+
+        // 파일을 DataURL로 읽기 <- 이미지 데이터를 문자열로 나타냄. img src에 사용 가능
+        reader.readAsDataURL(file);
+      });
+    }
   };
 
   return (
@@ -41,6 +67,7 @@ export default function PostForm({ me }: Props) {
           onChange={onChange}
           placeholder="무슨 일이 일어나고 있나요?"
         />
+        <div></div>
         <div className={style.postButtonSection}>
           <div className={style.footerButtons}>
             <div className={style.footerButtonLeft}>
@@ -50,6 +77,7 @@ export default function PostForm({ me }: Props) {
                 multiple
                 hidden
                 ref={imageRef}
+                onChange={onUpload}
               />
               <button
                 className={style.uploadButton}
