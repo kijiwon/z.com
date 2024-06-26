@@ -34,7 +34,7 @@ export default function PostForm({ me }: Props) {
       Array.from(e.target.files).forEach((file, index) => {
         const reader = new FileReader();
 
-        reader.onload = () => {
+        reader.onloadend = () => {
           // DataURL로 읽고 난 다음 실행됨
           setPreview((prevPreview) => {
             const prev = [...prevPreview];
@@ -50,7 +50,7 @@ export default function PostForm({ me }: Props) {
   };
 
   // 이미지 삭제하기
-  const onRemoveImage = (index: number) => {
+  const onRemoveImage = (index: number) => () => {
     setPreview((prevPreview) => {
       const prev = [...prevPreview];
       prev[index] = null;
@@ -79,7 +79,15 @@ export default function PostForm({ me }: Props) {
             (v, idx) =>
               v && (
                 <div key={idx} style={{ flex: 1 }} onClick={onRemoveImage(idx)}>
-                  <img src={v} alt="미리보기" />
+                  <img
+                    src={v}
+                    alt="미리보기"
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                      maxHeight: 100,
+                    }}
+                  />
                 </div>
               )
           )}
