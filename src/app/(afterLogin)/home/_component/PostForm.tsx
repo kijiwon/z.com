@@ -49,6 +49,15 @@ export default function PostForm({ me }: Props) {
     }
   };
 
+  // 이미지 삭제하기
+  const onRemoveImage = (index: number) => {
+    setPreview((prevPreview) => {
+      const prev = [...prevPreview];
+      prev[index] = null;
+      return prev;
+    });
+  };
+
   return (
     <form className={style.postForm} onSubmit={onSubmit}>
       <div className={style.postUserSection}>
@@ -65,9 +74,14 @@ export default function PostForm({ me }: Props) {
           onChange={onChange}
           placeholder="무슨 일이 일어나고 있나요?"
         />
-        <div>
+        <div style={{ display: "flex" }}>
           {preview.map(
-            (v, idx) => v && <img key={idx} src={v} alt="미리보기" />
+            (v, idx) =>
+              v && (
+                <div key={idx} style={{ flex: 1 }} onClick={onRemoveImage(idx)}>
+                  <img src={v} alt="미리보기" />
+                </div>
+              )
           )}
         </div>
         <div className={style.postButtonSection}>
