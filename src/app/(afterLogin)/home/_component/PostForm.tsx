@@ -12,9 +12,7 @@ type Props = {
 export default function PostForm({ me }: Props) {
   const imageRef = useRef<HTMLInputElement>(null); // 에러 방지를 위해 타입 정의
   const [content, setContent] = useState("");
-  const [preview, setPreview] = useState<Array<string | ArrayBuffer | null>>(
-    []
-  );
+  const [preview, setPreview] = useState<Array<string | null>>([]);
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
   };
@@ -40,7 +38,7 @@ export default function PostForm({ me }: Props) {
           // DataURL로 읽고 난 다음 실행됨
           setPreview((prevPreview) => {
             const prev = [...prevPreview];
-            prev[index] = reader.result;
+            prev[index] = reader.result as string;
             return prev;
           });
         };
@@ -67,7 +65,11 @@ export default function PostForm({ me }: Props) {
           onChange={onChange}
           placeholder="무슨 일이 일어나고 있나요?"
         />
-        <div></div>
+        <div>
+          {preview.map(
+            (v, idx) => v && <img key={idx} src={v} alt="미리보기" />
+          )}
+        </div>
         <div className={style.postButtonSection}>
           <div className={style.footerButtons}>
             <div className={style.footerButtonLeft}>
