@@ -12,13 +12,27 @@ type Props = {
 export default function PostForm({ me }: Props) {
   const imageRef = useRef<HTMLInputElement>(null); // 에러 방지를 위해 타입 정의
   const [content, setContent] = useState("");
-  const [preview, setPreview] = useState<Array<string | null>>([]);
+  const [preview, setPreview] = useState<
+    Array<{ dataUrl: string; file: File } | null>
+  >([]);
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
   };
 
-  const onSubmit: FormEventHandler = (e) => {
+  const onSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("content", content);
+    preview.forEach((p) => {
+      // 이미지는 하나씩 꺼내 폼 데이터에 추가
+      p && formData.append("images", p?.file);
+    });
+
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
+      method: "post",
+      credentials: "include",
+      body: formData,
+    });
   };
 
   // 이미지 파일 추가 버튼
@@ -38,7 +52,7 @@ export default function PostForm({ me }: Props) {
           // DataURL로 읽고 난 다음 실행됨
           setPreview((prevPreview) => {
             const prev = [...prevPreview];
-            prev[index] = reader.result as string;
+            prev[index] = { dataUrl: reader.result as string, file };
             return prev;
           });
         };
@@ -80,7 +94,7 @@ export default function PostForm({ me }: Props) {
               v && (
                 <div key={idx} style={{ flex: 1 }} onClick={onRemoveImage(idx)}>
                   <img
-                    src={v}
+                    src={v.dataUrl}
                     alt="미리보기"
                     style={{
                       width: "100%",
