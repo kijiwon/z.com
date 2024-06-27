@@ -4,6 +4,8 @@ import { ChangeEventHandler, FormEventHandler, useRef, useState } from "react";
 import style from "./postForm.module.css";
 import { Session } from "@auth/core/types";
 import TextareaAutosize from "react-textarea-autosize";
+import { useQueryClient } from "@tanstack/react-query";
+import { Post } from "@/model/Post";
 
 type Props = {
   me: Session | null;
@@ -15,6 +17,8 @@ export default function PostForm({ me }: Props) {
   const [preview, setPreview] = useState<
     Array<{ dataUrl: string; file: File } | null>
   >([]);
+  const queryClient = useQueryClient();
+
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
   };
@@ -27,12 +31,35 @@ export default function PostForm({ me }: Props) {
       // 이미지는 하나씩 꺼내 폼 데이터에 추가
       p && formData.append("images", p?.file);
     });
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
+        {
+          method: "post",
+          credentials: "include",
+          body: formData,
+        }
+      );
+      if (response.status === 201) {
+        // 포스팅 후 초기화
+        setContent("");
+        setPreview([]);
 
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
-      method: "post",
-      credentials: "include",
-      body: formData,
-    });
+        // 새로운 포스트 게시
+        const newPost = await response.json();
+        queryClient.setQueryData(
+          ["posts", "recommends"],
+          (prevData: { pages: Post[][] }) => {
+            const shallow = { ...prevData, pages: [...prevData.pages] }; // 불변성 지키기
+            shallow.pages[0] = [...shallow.pages[0]];
+            shallow.pages[0].unshift(newPost);
+            return shallow;
+          }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // 이미지 파일 추가 버튼
