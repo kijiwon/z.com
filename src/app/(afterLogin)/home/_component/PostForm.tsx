@@ -56,6 +56,17 @@ export default function PostForm({ me }: Props) {
             return shallow;
           }
         );
+
+        // 팔로우 중 탭에서 작성 시
+        queryClient.setQueryData(
+          ["posts", "followings"],
+          (prevData: { pages: Post[][] }) => {
+            const shallow = { ...prevData, pages: [...prevData.pages] }; // 불변성 지키기
+            shallow.pages[0] = [...shallow.pages[0]];
+            shallow.pages[0].unshift(newPost);
+            return shallow;
+          }
+        );
       }
     } catch (err) {
       console.log(err);
