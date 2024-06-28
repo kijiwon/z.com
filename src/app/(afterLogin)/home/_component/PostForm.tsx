@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEventHandler, FormEventHandler, useRef, useState } from "react";
+import { ChangeEventHandler, FormEvent, useRef, useState } from "react";
 import style from "./postForm.module.css";
 import { Session } from "@auth/core/types";
 import TextareaAutosize from "react-textarea-autosize";
