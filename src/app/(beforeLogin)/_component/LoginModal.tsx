@@ -14,16 +14,20 @@ export default function LoginModal() {
   const onClickClose = () => {
     router.back();
   };
+
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setMessage("");
+    console.time();
     try {
+      console.log("로그인 시작");
       const response = await signIn("credentials", {
         username: id,
         password,
         redirect: false,
       });
-      if (response?.error) {
+
+      if (!response?.ok) {
         setMessage("아이디와 비밀번호가 일치하지 않습니다.");
       } else {
         router.replace("/home");

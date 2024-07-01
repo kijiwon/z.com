@@ -27,7 +27,7 @@ function showMessage(messasge: string | null | undefined) {
 export default function SignupModal() {
   const [state, formAction] = useFormState(onSubmit, { message: null });
   const { pending } = useFormStatus();
-
+  console.log("state", state);
   return (
     <>
       <div className={style.modalBackground}>

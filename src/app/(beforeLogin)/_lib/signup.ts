@@ -1,7 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 "use server";
 
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
+import axios from "axios";
 
 export default async (
   prevState: { message: string | null } | undefined,
@@ -29,19 +31,19 @@ export default async (
   let shouldRedirect = false;
 
   try {
-    const response = await fetch(
+    const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,
       {
-        method: "post",
+        // method: "post",
         body: formData,
         credentials: "include",
       }
     );
-    console.log(response.status);
+    console.log(response);
     if (response.status === 403) {
       return { message: "user_exists" };
     }
-    console.log(await response.json());
+
     shouldRedirect = true;
     await signIn("credentials", {
       username: formData.get("id"),
@@ -49,7 +51,6 @@ export default async (
       redirect: false,
     });
   } catch (err) {
-    console.error(err);
     return { message: null };
   }
 
