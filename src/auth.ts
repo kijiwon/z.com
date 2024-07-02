@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import cookie from "cookie";
-import axios from "axios";
 
 export const {
   handlers: { GET, POST },
@@ -26,52 +25,37 @@ export const {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        try {
-          const authResponse = await axios.post(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/login`,
-            {
+        const authResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
               id: credentials.username,
               password: credentials.password,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              // withCredentials: true, // 쿠키를 포함한 요청을 보냄
-            }
-          );
-          console.log("로그인완료");
-          // 쿠키에 담긴 로그인 토큰 가져오기
-          const setCookieHeader = authResponse.headers["set-cookie"];
-          console.log("set-cookie", setCookieHeader);
-
-          if (setCookieHeader) {
-            const parsed = cookie.parse(setCookieHeader[0]);
-            cookies().set("connect.sid", parsed["connect.sid"], {
-              httpOnly: true,
-              secure: process.env.NODE_ENV === "production",
-              sameSite: "strict",
-              path: "/",
-            }); // 브라우저에 쿠키를 심어주는 것
+            }),
           }
-
-          if (authResponse.status !== 200) {
-            return null;
-          }
-
-          const user = authResponse.data;
-          console.log("user", user);
-
-          return {
-            email: user.id,
-            name: user.name,
-            image: user.image,
-            ...user,
-          };
-        } catch (error) {
-          console.error("로그인 요청 오류:", error);
+        );
+        let setCookie = authResponse.headers.get("Set-Cookie");
+        console.log("set-cookie", setCookie);
+        if (setCookie) {
+          const parsed = cookie.parse(setCookie);
+          cookies().set("connect.sid", parsed["connect.sid"], parsed); // 브라우저에 쿠키를 심어주는 것
+        }
+        if (!authResponse.ok) {
           return null;
         }
+
+        const user = await authResponse.json();
+        console.log("user", user);
+        return {
+          email: user.id,
+          name: user.nickname,
+          image: user.image,
+          ...user,
+        };
       },
     }),
   ],

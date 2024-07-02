@@ -15,7 +15,6 @@
     "@mswjs/http-middleware": "^0.10.1",
     "@tanstack/react-query": "^5.40.1",
     "@tanstack/react-query-devtools": "^5.40.1",
-    "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "cookie": "^0.6.0",
     "cors": "^2.8.5",

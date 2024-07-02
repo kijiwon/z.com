@@ -18,7 +18,7 @@ export default function LoginModal() {
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setMessage("");
-    console.time();
+
     try {
       console.log("로그인 시작");
       const response = await signIn("credentials", {
@@ -26,7 +26,7 @@ export default function LoginModal() {
         password,
         redirect: false,
       });
-
+      console.log(response);
       if (!response?.ok) {
         setMessage("아이디와 비밀번호가 일치하지 않습니다.");
       } else {
