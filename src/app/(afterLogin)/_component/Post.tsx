@@ -8,6 +8,7 @@ import PostArticle from "@/app/(afterLogin)/_component/PostArticle";
 import { faker } from "@faker-js/faker";
 import PostImages from "./PostImages";
 import { Post as IPost } from "@/model/Post";
+import { MouseEventHandler } from "react";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -20,11 +21,20 @@ type Props = {
 export default function Post({ noImage, post }: Props) {
   const target = post;
 
+  // 링크 클릭시 상위 엘리먼트에 이벤트가 전달되지 않도록하기 -> 상세페이지로 이동하지 않음
+  const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <PostArticle post={target}>
       <div className={style.postWrapper}>
         <div className={style.postUserSection}>
-          <Link href={`/${target.User.id}`} className={style.postUserImage}>
+          <Link
+            href={`/${target.User.id}`}
+            className={style.postUserImage}
+            onClick={stopPropagation}
+          >
             <img src={target.User.image} alt={target?.User.nickname} />
             <div className={style.postShade} />
           </Link>
@@ -47,7 +57,7 @@ export default function Post({ noImage, post }: Props) {
               <PostImages post={target} />
             </div>
           )}
-          <ActionButtons />
+          <ActionButtons postId={post.postId} />
         </div>
       </div>
     </PostArticle>
