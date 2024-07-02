@@ -35,7 +35,7 @@ export default function ImageZone({ id }: Props) {
       />
       <div className={style.buttonZone}>
         <div className={style.buttonInner}>
-          <ActionButtons white postId={post.postId} />
+          <ActionButtons white post={post} />
         </div>
       </div>
     </div>

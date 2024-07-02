@@ -3,21 +3,30 @@
 import { MouseEventHandler } from "react";
 import style from "./post.module.css";
 import cx from "classnames";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Post } from "@/model/Post";
 import { useSession } from "next-auth/react";
 
 type Props = {
   white?: boolean;
-  postId: number;
+  post: Post;
 };
 
-export default function ActionButtons({ white, postId }: Props) {
+export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
-  const commented = false;
-  const reposted = false;
-  const liked = false;
   const { data: session } = useSession();
+  const commented = !!post.Comments?.find(
+    (v) => v.userId === session?.user?.email
+  );
+  const reposted = !!post.Reposts?.find(
+    (v) => v.userId === session?.user?.email
+  );
+  const liked = !!post.Hearts?.find((v) => v.userId === session?.user?.email);
+  const { postId } = post;
 
   const heart = useMutation({
     mutationFn: () => {
@@ -38,21 +47,31 @@ export default function ActionButtons({ white, postId }: Props) {
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           // queryKey의 대분류(제일 앞의 인덱스)가 'posts'이라면
-          const value: Post | Post[] | undefined =
+          const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
-          // value가 배열인지 판단
-          if (Array.isArray(value)) {
-            // value가 배열 -> post가 여러개
-            const index = value.findIndex((v) => v.postId === postId);
-            if (index > -1) {
-              // 일치하는 포스트가 존재하는 경우
-              const shallow = [...value]; // 얕은 복사
-              shallow[index] = {
-                ...shallow[index],
+
+          // pages는 2차원 배열로 들어있음 -> pages안에서 pages를 찾아야함
+          if (value && "pages" in value) {
+            // 2차원 배열을 1차원 배열로 꺼내 돌리기
+            const obj = value.pages.flat().find((v) => v.postId === postId);
+            if (obj) {
+              // obj가 존재하면 몇페이지에 존재하는지 리턴
+              const pageIndex = value.pages.findIndex((page) =>
+                page.includes(obj)
+              );
+
+              const index = value.pages[pageIndex].findIndex(
+                (v) => v.postId === postId
+              );
+              const shallow = { ...value };
+              value.pages = { ...value.pages };
+              value.pages[pageIndex] = [...value.pages[pageIndex]];
+              shallow.pages[pageIndex][index] = {
+                ...shallow.pages[pageIndex][index],
                 Hearts: [{ userId: session?.user?.email as string }],
                 _count: {
-                  ...shallow[index]._count,
-                  Hearts: shallow[index]._count.Hearts + 1,
+                  ...shallow.pages[pageIndex][index]._count,
+                  Hearts: shallow.pages[pageIndex][index]._count.Hearts + 1,
                 },
               };
               queryClient.setQueryData(queryKey, shallow);
@@ -95,23 +114,32 @@ export default function ActionButtons({ white, postId }: Props) {
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           // queryKey의 대분류(제일 앞의 인덱스)가 'posts'이라면
-          const value: Post | Post[] | undefined =
+          const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
           // value가 배열인지 판단
-          if (Array.isArray(value)) {
-            // value가 배열 -> post가 여러개
-            const index = value.findIndex((v) => v.postId === postId);
-            if (index > -1) {
-              // 일치하는 포스트가 존재하는 경우
-              const shallow = [...value]; // 얕은 복사
-              shallow[index] = {
-                ...shallow[index],
-                Hearts: shallow[index].Hearts.filter(
+          if (value && "pages" in value) {
+            console.log("array", value);
+            const obj = value.pages.flat().find((v) => v.postId === postId);
+            if (obj) {
+              // 존재는 하는지
+              const pageIndex = value.pages.findIndex((page) =>
+                page.includes(obj)
+              );
+              const index = value.pages[pageIndex].findIndex(
+                (v) => v.postId === postId
+              );
+              console.log("found index", index);
+              const shallow = { ...value };
+              value.pages = { ...value.pages };
+              value.pages[pageIndex] = [...value.pages[pageIndex]];
+              shallow.pages[pageIndex][index] = {
+                ...shallow.pages[pageIndex][index],
+                Hearts: shallow.pages[pageIndex][index].Hearts.filter(
                   (v) => v.userId !== session?.user?.email
                 ),
                 _count: {
-                  ...shallow[index]._count,
-                  Hearts: shallow[index]._count.Hearts - 1,
+                  ...shallow.pages[pageIndex][index]._count,
+                  Hearts: shallow.pages[pageIndex][index]._count.Hearts - 1,
                 },
               };
               queryClient.setQueryData(queryKey, shallow);
@@ -139,8 +167,9 @@ export default function ActionButtons({ white, postId }: Props) {
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
+    console.log(liked);
     if (liked) {
-      // unheart.mutate();
+      unheart.mutate();
     } else {
       heart.mutate();
     }
@@ -162,7 +191,7 @@ export default function ActionButtons({ white, postId }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{1 || ""}</div>
+        <div className={style.count}>{post._count?.Comments || ""}</div>
       </div>
       <div
         className={cx(
@@ -178,7 +207,7 @@ export default function ActionButtons({ white, postId }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{1 || ""}</div>
+        <div className={style.count}>{post._count?.Reposts || ""}</div>
       </div>
       <div
         className={cx(
@@ -193,7 +222,7 @@ export default function ActionButtons({ white, postId }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{1 || ""}</div>
+        <div className={style.count}>{post._count?.Hearts || ""}</div>
       </div>
     </div>
   );
