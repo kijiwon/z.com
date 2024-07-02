@@ -21,10 +21,13 @@ export default function ActionButtons({ white, postId }: Props) {
 
   const heart = useMutation({
     mutationFn: () => {
-      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/{id}/heart`, {
-        method: "post",
-        credentials: "include",
-      });
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}/heart`,
+        {
+          method: "post",
+          credentials: "include",
+        }
+      );
     },
     onMutate() {
       // query cache를 모두 받아오기
@@ -73,6 +76,64 @@ export default function ActionButtons({ white, postId }: Props) {
     },
   });
 
+  const unheart = useMutation({
+    mutationFn: () => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}/heart`,
+        {
+          method: "post",
+          credentials: "include",
+        }
+      );
+    },
+    onMutate() {
+      // query cache를 모두 받아오기
+      const queryCache = queryClient.getQueryCache();
+      // queryKey 가져오기
+      const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
+      console.log("queryKeys", queryKeys);
+      queryKeys.forEach((queryKey) => {
+        if (queryKey[0] === "posts") {
+          // queryKey의 대분류(제일 앞의 인덱스)가 'posts'이라면
+          const value: Post | Post[] | undefined =
+            queryClient.getQueryData(queryKey);
+          // value가 배열인지 판단
+          if (Array.isArray(value)) {
+            // value가 배열 -> post가 여러개
+            const index = value.findIndex((v) => v.postId === postId);
+            if (index > -1) {
+              // 일치하는 포스트가 존재하는 경우
+              const shallow = [...value]; // 얕은 복사
+              shallow[index] = {
+                ...shallow[index],
+                Hearts: shallow[index].Hearts.filter(
+                  (v) => v.userId !== session?.user?.email
+                ),
+                _count: {
+                  ...shallow[index]._count,
+                  Hearts: shallow[index]._count.Hearts - 1,
+                },
+              };
+              queryClient.setQueryData(queryKey, shallow);
+            }
+          } else if (value) {
+            // 싱글 포스트
+            if (value.postId === postId) {
+              const shallow = {
+                ...value,
+                Hearts: [{ userId: session?.user?.email as string }],
+                _count: {
+                  ...value._count,
+                  Hearts: value._count.Hearts + 1,
+                },
+              };
+              queryClient.setQueryData(queryKey, shallow);
+            }
+          }
+        }
+      });
+    },
+  });
   const onClickComment = () => {};
   const onClickRepost = () => {};
 
