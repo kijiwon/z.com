@@ -147,6 +147,12 @@ export default function ActionButtons({ white, post }: Props) {
         }
       });
     },
+    onSettled() {
+      // queryKey가 'posts'로 시작하는 모든 게시글을 업데이트 <- 지금은 굳이 필요는 없음
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+    },
   });
 
   const unheart = useMutation({
@@ -264,6 +270,11 @@ export default function ActionButtons({ white, post }: Props) {
             }
           }
         }
+      });
+    },
+    onSettled() {
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
       });
     },
   });
