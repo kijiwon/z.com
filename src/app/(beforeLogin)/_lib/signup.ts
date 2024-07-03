@@ -1,21 +1,13 @@
-/* eslint-disable import/no-anonymous-default-export */
 "use server";
 
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 
-export default async (
-  prevState: { message: string | null } | undefined,
-  formData: FormData
-) => {
-  // formData 검증
+export default async (prevState: any, formData: FormData) => {
   if (!formData.get("id") || !(formData.get("id") as string)?.trim()) {
     return { message: "no_id" };
   }
-  if (
-    !formData.get("nickname") ||
-    !(formData.get("nickname") as string)?.trim()
-  ) {
+  if (!formData.get("name") || !(formData.get("name") as string)?.trim()) {
     return { message: "no_name" };
   }
   if (
@@ -27,8 +19,8 @@ export default async (
   if (!formData.get("image")) {
     return { message: "no_image" };
   }
+  formData.set("nickname", formData.get("name") as string);
   let shouldRedirect = false;
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,
@@ -38,11 +30,11 @@ export default async (
         credentials: "include",
       }
     );
-
+    console.log(response.status);
     if (response.status === 403) {
       return { message: "user_exists" };
     }
-
+    console.log(await response.json());
     shouldRedirect = true;
     await signIn("credentials", {
       username: formData.get("id"),
@@ -50,11 +42,13 @@ export default async (
       redirect: false,
     });
   } catch (err) {
+    console.error(err);
     return { message: null };
   }
 
   if (shouldRedirect) {
     redirect("/home");
-  } // home페이지로 이동
-  // redirect는 try/catch문 안에서 사용할 수 없음
+    // redirect는 try/catch문 안에서 사용할 수 없음
+  }
+  return { message: null };
 };

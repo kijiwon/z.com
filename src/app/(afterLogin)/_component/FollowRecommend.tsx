@@ -5,6 +5,7 @@ import style from "./followRecommend.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import cx from "classnames";
+import { MouseEventHandler } from "react";
 
 type Props = {
   user: User;
@@ -67,6 +68,7 @@ export default function FollowRecommend({ user }: Props) {
       ]);
       if (value) {
         const index = value.findIndex((v) => v.id === userId);
+        console.log(value, userId, index);
         const shallow = [...value];
         shallow[index] = {
           ...shallow[index],
@@ -78,13 +80,16 @@ export default function FollowRecommend({ user }: Props) {
             Followers: shallow[index]._count?.Followers - 1,
           },
         };
+        queryClient.setQueryData(["users", "followRecommends"], shallow);
       }
     },
     onError() {},
   });
 
-  const onFollow = () => {
-    console.log(followed);
+  const onFollow: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("follow", followed, user.id);
     if (followed) {
       unfollow.mutate(user.id);
     } else {
