@@ -4,6 +4,7 @@ import { User } from "@/model/User";
 import style from "./followRecommend.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import cx from "classnames";
 
 type Props = {
   user: User;
@@ -83,6 +84,7 @@ export default function FollowRecommend({ user }: Props) {
   });
 
   const onFollow = () => {
+    console.log(followed);
     if (followed) {
       unfollow.mutate(user.id);
     } else {
@@ -101,7 +103,9 @@ export default function FollowRecommend({ user }: Props) {
         <div className={style.title}>{user.nickname}</div>
         <div className={style.count}>@{user.id}</div>
       </div>
-      <div className={style.followButtonSection}>
+      <div
+        className={cx(style.followButtonSection, followed && style.followed)}
+      >
         <button onClick={onFollow}>{followed ? "팔로잉" : "팔로우"}</button>
       </div>
     </div>
