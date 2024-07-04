@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import cx from "classnames";
 import { MouseEventHandler } from "react";
+import Link from "next/link";
 
 type Props = {
   user: User;
@@ -98,7 +99,7 @@ export default function FollowRecommend({ user }: Props) {
   };
 
   return (
-    <div className={style.container}>
+    <Link href={`/${user.id}`} className={style.container}>
       <div className={style.userLogoSection}>
         <div className={style.userLogo}>
           <img src={user.image} alt={user.id} />
@@ -113,6 +114,6 @@ export default function FollowRecommend({ user }: Props) {
       >
         <button onClick={onFollow}>{followed ? "팔로잉" : "팔로우"}</button>
       </div>
-    </div>
+    </Link>
   );
 }
