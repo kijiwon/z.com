@@ -48,6 +48,22 @@ export default function FollowRecommend({ user }: Props) {
         };
         queryClient.setQueryData(["users", "followRecommends"], shallow);
       }
+      // 해당 user의 Follower 변경하기
+      const value2: User | undefined = queryClient.getQueryData([
+        "users",
+        userId,
+      ]);
+      if (value2) {
+        const shallow = {
+          ...value2,
+          Followers: [{ id: session?.user?.email as string }],
+          _count: {
+            ...value2._count,
+            Followers: value2._count?.Followers + 1,
+          },
+        };
+        queryClient.setQueryData(["users", userId], shallow);
+      }
     },
     onError() {},
   });
@@ -82,6 +98,23 @@ export default function FollowRecommend({ user }: Props) {
           },
         };
         queryClient.setQueryData(["users", "followRecommends"], shallow);
+        const value2: User | undefined = queryClient.getQueryData([
+          "users",
+          userId,
+        ]);
+        if (value2) {
+          const shallow = {
+            ...value2,
+            Followers: value2.Followers.filter(
+              (v) => v.userId !== session?.user?.email
+            ),
+            _count: {
+              ...value2._count,
+              Followers: value2._count?.Followers - 1,
+            },
+          };
+          queryClient.setQueryData(["users", userId], shallow);
+        }
       }
     },
     onError() {},
