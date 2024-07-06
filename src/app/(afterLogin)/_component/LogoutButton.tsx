@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import style from "./logoutButton.module.css";
 import { signOut } from "next-auth/react";
 import { Session } from "@auth/core/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   me: Session | null;
@@ -11,8 +12,16 @@ type Props = {
 
 export default function LogoutButton({ me }: Props) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const onLogout = () => {
+    // 'posts'와 'users'에 대한 모든 데이터 날려주기
+    queryClient.invalidateQueries({
+      queryKey: ["posts"],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["users"],
+    });
     signOut({ redirect: false }).then(() => {
       router.replace("/");
     });
