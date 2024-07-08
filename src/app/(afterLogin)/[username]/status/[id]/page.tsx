@@ -9,10 +9,27 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getSinglePost } from "./_lib/getSinglePost";
+import { getSinglePostServer } from "./_lib/getSinglePostServer";
 import { getComments } from "./_lib/getComments";
+import { User } from "@/model/User";
+import { Post } from "@/model/Post";
+import { getUserServer } from "../../_lib/getUserServer";
+
+export async function generateMetadata({ params }: Props) {
+  const user: User = await getUserServer({
+    queryKey: ["users", params.username],
+  });
+  const post: Post = await getSinglePostServer({
+    queryKey: ["posts", params.id],
+  });
+  return {
+    title: `Z에서 ${user.nickname} 님 : ${post.content}`,
+    description: post.content,
+  };
+}
 
 type Props = {
-  params: { id: string };
+  params: { id: string; username: string };
 };
 
 export default async function Page({ params }: Props) {

@@ -10,6 +10,12 @@ import style from "./home.module.css";
 import { getPostRecommends } from "./_lib/getPostRecommends";
 import TabDecider from "./_component/TabDecider";
 import { auth } from "@/auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "홈 / Z",
+  description: "홈",
+};
 
 export default async function Home() {
   const session = await auth();

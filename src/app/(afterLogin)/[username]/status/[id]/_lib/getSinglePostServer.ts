@@ -1,19 +1,17 @@
 import { cookies } from "next/headers";
 
-export const getUserServer = async ({
+export const getSinglePostServer = async ({
   queryKey,
 }: {
   queryKey: [string, string];
 }) => {
-  const [_1, username] = queryKey;
-  const res = await fetch(`http://localhost:9090/api/users/${username}`, {
+  const [_1, id] = queryKey;
+  const res = await fetch(`http://localhost:9090/api/posts/${id}`, {
     next: {
-      tags: ["users", username],
+      tags: ["posts", id],
     },
     credentials: "include",
-    // 브라우저의 쿠키를 서버에 전달
     headers: { Cookie: cookies().toString() },
-    cache: "no-store",
   });
 
   if (!res.ok) {
