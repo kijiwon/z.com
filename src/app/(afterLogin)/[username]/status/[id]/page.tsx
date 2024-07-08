@@ -15,6 +15,7 @@ import { User } from "@/model/User";
 import { Post } from "@/model/Post";
 import { getUserServer } from "../../_lib/getUserServer";
 
+// 동적 메타데이터가 필요 -> generateMetadata
 export async function generateMetadata({ params }: Props) {
   const user: User = await getUserServer({
     queryKey: ["users", params.username],

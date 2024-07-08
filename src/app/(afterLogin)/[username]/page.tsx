@@ -10,7 +10,7 @@ import { getUserPosts } from "./_lib/getUserPosts";
 import UserPosts from "./_component/UserPosts";
 import UserInfo from "./_component/UserInfo";
 import { auth } from "@/auth";
-import {User} from "@/model/User";
+import { User } from "@/model/User";
 
 export async function generateMetadata({ params }: Props) {
   const user: User = await getUserServer({
@@ -39,12 +39,6 @@ export default async function Profile({ params }: Props) {
     queryFn: getUserPosts,
   });
   const dehydratedState = dehydrate(queryClient);
-
-  const user = {
-    id: "zzionie",
-    nickname: "찌오니",
-    image: "/5Udwvqim.jpg",
-  };
 
   return (
     <main className={style.main}>
