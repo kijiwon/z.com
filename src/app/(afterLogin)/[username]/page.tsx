@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import style from "./profile.module.css";
 import BackButton from "@/app/(afterLogin)/_component/BackButton";
-import { getUser } from "./_lib/getUser";
+import { getUserServer } from "./_lib/getUserServer";
 import { getUserPosts } from "./_lib/getUserPosts";
 import UserPosts from "./_component/UserPosts";
 import UserInfo from "./_component/UserInfo";
@@ -19,7 +19,7 @@ export default async function Profile({ params }: Props) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["users", username],
-    queryFn: getUser,
+    queryFn: getUserServer,
   });
   await queryClient.prefetchQuery({
     queryKey: ["posts", "users", username],
