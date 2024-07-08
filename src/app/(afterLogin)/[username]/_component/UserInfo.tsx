@@ -5,15 +5,16 @@ import BackButton from "@/app/(afterLogin)/_component/BackButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@/model/User";
 import { getUser } from "@/app/(afterLogin)/[username]/_lib/getUser";
-import { useSession } from "next-auth/react";
 import cx from "classnames";
 import { MouseEventHandler } from "react";
+import { Session } from "@auth/core/types";
 
 type Props = {
   username: string;
+  session: Session | null;
 };
 
-export default function UserInfo({ username }: Props) {
+export default function UserInfo({ username, session }: Props) {
   const { data: user, error } = useQuery<
     User,
     Object,
@@ -25,7 +26,7 @@ export default function UserInfo({ username }: Props) {
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });
-  const { data: session } = useSession();
+
   const queryClient = useQueryClient();
 
   const follow = useMutation({
