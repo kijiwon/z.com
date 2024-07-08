@@ -23,6 +23,10 @@ export default function LogoutButton({ me }: Props) {
       queryKey: ["users"],
     });
     signOut({ redirect: false }).then(() => {
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
+        method: "post",
+        credentials: "include",
+      });
       router.replace("/");
     });
   };
