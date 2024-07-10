@@ -28,6 +28,30 @@ export default function ActionButtons({ white, post }: Props) {
   const liked = !!post.Hearts?.find((v) => v.userId === session?.user?.email);
   const { postId } = post;
 
+  const repost = useMutation({
+    mutationFn: () => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post.postId}/reposts`,
+        {
+          method: "post",
+          credentials: "include",
+        }
+      );
+    },
+  });
+
+  const deleteRepost = useMutation({
+    mutationFn: () => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post.postId}/reposts`,
+        {
+          method: "delete",
+          credentials: "include",
+        }
+      );
+    },
+  });
+
   const heart = useMutation({
     mutationFn: () => {
       return fetch(
@@ -280,7 +304,14 @@ export default function ActionButtons({ white, post }: Props) {
   });
 
   const onClickComment = () => {};
-  const onClickRepost = () => {};
+  const onClickRepost: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    if (!reposted) {
+      repost.mutate();
+    } else {
+      deleteRepost.mutate();
+    }
+  };
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
