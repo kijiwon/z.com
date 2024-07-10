@@ -278,6 +278,7 @@ export default function ActionButtons({ white, post }: Props) {
       });
     },
   });
+
   const onClickComment = () => {};
   const onClickRepost = () => {};
 

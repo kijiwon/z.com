@@ -5,7 +5,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
 import PostArticle from "@/app/(afterLogin)/_component/PostArticle";
-import { faker } from "@faker-js/faker";
 import PostImages from "./PostImages";
 import { Post as IPost } from "@/model/Post";
 import { MouseEventHandler } from "react";
