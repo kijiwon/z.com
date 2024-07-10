@@ -39,7 +39,7 @@ export const {
           }
         );
         let setCookie = authResponse.headers.get("Set-Cookie");
-        console.log("set-cookie", setCookie);
+        // console.log("set-cookie", setCookie);
         if (setCookie) {
           const parsed = cookie.parse(setCookie);
           cookies().set("connect.sid", parsed["connect.sid"], parsed); // 브라우저에 쿠키를 심어주는 것
@@ -49,7 +49,7 @@ export const {
         }
 
         const user = await authResponse.json();
-        console.log("user", user);
+        // console.log("user", user);
         return {
           email: user.id,
           name: user.nickname,
