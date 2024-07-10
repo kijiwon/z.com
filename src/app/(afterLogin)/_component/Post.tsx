@@ -71,6 +71,19 @@ export default function Post({ noImage, post }: Props) {
               {dayjs(target.createdAt).fromNow(true)}
             </span>
           </div>
+          {/* 답글인 경우 */}
+          {target.Parent && (
+            <div>
+              <Link
+                href={`/${target.Parent.User.id}`}
+                style={{ color: "rgb(29, 155, 240)" }}
+                onClick={stopPropagation}
+              >
+                @{target.Parent.User.id}
+              </Link>
+              님에게 보내는 답글
+            </div>
+          )}
           <div>{target.content}</div>
           {!noImage && (
             <div>
