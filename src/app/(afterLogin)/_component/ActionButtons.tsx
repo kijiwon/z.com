@@ -104,8 +104,70 @@ export default function ActionButtons({ white, post }: Props) {
         }
       );
     },
-    async onSuccess(response) {
-      const data = await response.json();
+    onSuccess() {
+      const queryCache = queryClient.getQueryCache();
+      const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
+      console.log("queryKeys", queryKeys);
+      queryKeys.forEach((queryKey) => {
+        if (queryKey[0] === "posts") {
+          const value: Post | InfiniteData<Post[]> | undefined =
+            queryClient.getQueryData(queryKey);
+          if (value && "pages" in value) {
+            console.log("array", value);
+            const obj = value.pages.flat().find((v) => v.postId === postId);
+            // repost를 먼저 찾기
+            const repost = value.pages.flat().find(
+              (v) =>
+                v.Original?.postId === postId &&
+                // 해당 유저가 reposts한건지 확인
+                v.User.id === session?.user?.email
+            );
+            if (obj) {
+              // 존재는 하는지
+              const pageIndex = value.pages.findIndex((page) =>
+                page.includes(obj)
+              );
+              const index = value.pages[pageIndex].findIndex(
+                (v) => v.postId === postId
+              );
+              console.log("found index", index);
+              const shallow = { ...value };
+              value.pages = { ...value.pages };
+              value.pages[pageIndex] = [...value.pages[pageIndex]];
+              shallow.pages[pageIndex][index] = {
+                ...shallow.pages[pageIndex][index],
+                Reposts: shallow.pages[pageIndex][index].Reposts.filter(
+                  (v) => v.userId !== session?.user?.email
+                ),
+                _count: {
+                  ...shallow.pages[pageIndex][index]._count,
+                  Reposts: shallow.pages[pageIndex][index]._count.Reposts - 1,
+                },
+              };
+              // 재게시 삭제
+              shallow.pages = shallow.pages.map((page) => {
+                return page.filter((v) => v.postId !== repost?.postId);
+              });
+              queryClient.setQueryData(queryKey, shallow);
+            }
+          } else if (value) {
+            // 싱글 포스트인 경우
+            if (value.postId === postId) {
+              const shallow = {
+                ...value,
+                Reposts: value.Reposts.filter(
+                  (v) => v.userId !== session?.user?.email
+                ),
+                _count: {
+                  ...value._count,
+                  Reposts: value._count.Reposts - 1,
+                },
+              };
+              queryClient.setQueryData(queryKey, shallow);
+            }
+          }
+        }
+      });
     },
   });
 
