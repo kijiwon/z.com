@@ -38,6 +38,9 @@ export default function ActionButtons({ white, post }: Props) {
         }
       );
     },
+    async onSuccess(response) {
+      const data = await response.json();
+    },
   });
 
   const deleteRepost = useMutation({
@@ -49,6 +52,9 @@ export default function ActionButtons({ white, post }: Props) {
           credentials: "include",
         }
       );
+    },
+    async onSuccess(response) {
+      const data = await response.json();
     },
   });
 
