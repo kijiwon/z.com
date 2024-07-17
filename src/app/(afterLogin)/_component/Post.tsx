@@ -28,6 +28,7 @@ export default function Post({ noImage, post }: Props) {
   // 링크 클릭시 상위 엘리먼트에 이벤트가 전달되지 않도록하기 -> 상세페이지로 이동하지 않음
   const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.stopPropagation();
+    console.log(target);
   };
 
   return (
@@ -61,7 +62,7 @@ export default function Post({ noImage, post }: Props) {
         </div>
         <div className={style.postBody}>
           <div className={style.postMeta}>
-            <Link href={`/${target.User.id}`}>
+            <Link href={`/${target?.User.id}`}>
               <span className={style.postUserName}>{target.User.nickname}</span>
               &nbsp;
               <span className={style.postUserId}>@{target.User.id}</span>

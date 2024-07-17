@@ -43,14 +43,14 @@ export default function ActionButtons({ white, post }: Props) {
       const data = await response.json();
       const queryCache = queryClient.getQueryCache();
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
-          console.log(queryKey[0]);
+          // console.log(queryKey[0]);
           const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
           if (value && "pages" in value) {
-            console.log("array", value);
+            // console.log("array", value);
             const obj = value.pages.flat().find((v) => v.postId === postId);
             if (obj) {
               // 존재는 하는지
@@ -60,7 +60,7 @@ export default function ActionButtons({ white, post }: Props) {
               const index = value.pages[pageIndex].findIndex(
                 (v) => v.postId === postId
               );
-              console.log("found index", index);
+              // console.log("found index", index);
               const shallow = { ...value };
               value.pages = { ...value.pages };
               value.pages[pageIndex] = [...value.pages[pageIndex]];
@@ -107,13 +107,13 @@ export default function ActionButtons({ white, post }: Props) {
     onSuccess() {
       const queryCache = queryClient.getQueryCache();
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
           if (value && "pages" in value) {
-            console.log("array", value);
+            // console.log("array", value);
             const obj = value.pages.flat().find((v) => v.postId === postId);
             // repost를 먼저 찾기
             const repost = value.pages.flat().find(
@@ -130,7 +130,7 @@ export default function ActionButtons({ white, post }: Props) {
               const index = value.pages[pageIndex].findIndex(
                 (v) => v.postId === postId
               );
-              console.log("found index", index);
+              // console.log("found index", index);
               const shallow = { ...value };
               value.pages = { ...value.pages };
               value.pages[pageIndex] = [...value.pages[pageIndex]];
@@ -186,7 +186,7 @@ export default function ActionButtons({ white, post }: Props) {
       const queryCache = queryClient.getQueryCache();
       // queryKey 가져오기
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           // queryKey의 대분류(제일 앞의 인덱스)가 'posts'이라면
@@ -239,13 +239,13 @@ export default function ActionButtons({ white, post }: Props) {
     onError() {
       const queryCache = queryClient.getQueryCache();
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
           if (value && "pages" in value) {
-            console.log("array", value);
+            // console.log("array", value);
             const obj = value.pages.flat().find((v) => v.postId === postId);
             if (obj) {
               // 존재는 하는지
@@ -255,7 +255,7 @@ export default function ActionButtons({ white, post }: Props) {
               const index = value.pages[pageIndex].findIndex(
                 (v) => v.postId === postId
               );
-              console.log("found index", index);
+              // console.log("found index", index);
               const shallow = { ...value };
               value.pages = { ...value.pages };
               value.pages[pageIndex] = [...value.pages[pageIndex]];
@@ -313,7 +313,7 @@ export default function ActionButtons({ white, post }: Props) {
       const queryCache = queryClient.getQueryCache();
       // queryKey 가져오기
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           // queryKey의 대분류(제일 앞의 인덱스)가 'posts'이라면
@@ -321,7 +321,7 @@ export default function ActionButtons({ white, post }: Props) {
             queryClient.getQueryData(queryKey);
           // value가 배열인지 판단
           if (value && "pages" in value) {
-            console.log("array", value);
+            // console.log("array", value);
             const obj = value.pages.flat().find((v) => v.postId === postId);
             if (obj) {
               // 존재는 하는지
@@ -331,7 +331,7 @@ export default function ActionButtons({ white, post }: Props) {
               const index = value.pages[pageIndex].findIndex(
                 (v) => v.postId === postId
               );
-              console.log("found index", index);
+              // console.log("found index", index);
               const shallow = { ...value };
               value.pages = { ...value.pages };
               value.pages[pageIndex] = [...value.pages[pageIndex]];
@@ -367,14 +367,14 @@ export default function ActionButtons({ white, post }: Props) {
     onError() {
       const queryCache = queryClient.getQueryCache();
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log("queryKeys", queryKeys);
+      // console.log("queryKeys", queryKeys);
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
-          console.log(queryKey[0]);
+          // console.log(queryKey[0]);
           const value: Post | InfiniteData<Post[]> | undefined =
             queryClient.getQueryData(queryKey);
           if (value && "pages" in value) {
-            console.log("array", value);
+            // console.log("array", value);
             const obj = value.pages.flat().find((v) => v.postId === postId);
             if (obj) {
               // 존재는 하는지
@@ -384,7 +384,7 @@ export default function ActionButtons({ white, post }: Props) {
               const index = value.pages[pageIndex].findIndex(
                 (v) => v.postId === postId
               );
-              console.log("found index", index);
+              // console.log("found index", index);
               const shallow = { ...value };
               value.pages = { ...value.pages };
               value.pages[pageIndex] = [...value.pages[pageIndex]];
@@ -434,7 +434,6 @@ export default function ActionButtons({ white, post }: Props) {
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
-    console.log(liked);
     if (liked) {
       unheart.mutate();
     } else {
@@ -444,13 +443,7 @@ export default function ActionButtons({ white, post }: Props) {
 
   return (
     <div className={style.actionButtons}>
-      <div
-        className={cx(
-          style.commentButton,
-          { [style.commented]: commented },
-          white && style.white
-        )}
-      >
+      <div className={cx(style.commentButton, white && style.white)}>
         <button onClick={onClickComment}>
           <svg width={24} viewBox="0 0 24 24" aria-hidden="true">
             <g>
