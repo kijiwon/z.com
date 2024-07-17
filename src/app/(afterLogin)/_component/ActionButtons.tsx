@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { Post } from "@/model/Post";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   white?: boolean;
@@ -19,7 +20,7 @@ type Props = {
 export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-
+  const router = useRouter();
   const reposted = !!post.Reposts?.find(
     (v) => v.userId === session?.user?.email
   );
@@ -420,7 +421,13 @@ export default function ActionButtons({ white, post }: Props) {
     },
   });
 
-  const onClickComment = () => {};
+  const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+
+    // /compose/tweet으로 이동
+    router.push(`/compose/tweet`);
+  };
+
   const onClickRepost: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     if (!reposted) {
