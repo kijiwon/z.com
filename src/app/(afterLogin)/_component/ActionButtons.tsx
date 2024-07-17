@@ -19,9 +19,7 @@ type Props = {
 export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-  const commented = !!post.Comments?.find(
-    (v) => v.userId === session?.user?.email
-  );
+
   const reposted = !!post.Reposts?.find(
     (v) => v.userId === session?.user?.email
   );
