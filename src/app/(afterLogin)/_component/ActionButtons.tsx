@@ -424,6 +424,9 @@ export default function ActionButtons({ white, post }: Props) {
   const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
+    // 어떤 포스트에 대한 답글인지 정보 보내주기
+    // -> 컴포넌트 간 상태 공유
+
     // /compose/tweet으로 이동
     router.push(`/compose/tweet`);
   };
