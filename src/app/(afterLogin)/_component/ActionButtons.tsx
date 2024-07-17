@@ -11,6 +11,7 @@ import {
 import { Post } from "@/model/Post";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useModalStore } from "@/store/modal";
 
 type Props = {
   white?: boolean;
@@ -21,6 +22,8 @@ export default function ActionButtons({ white, post }: Props) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const router = useRouter();
+  // modalStore 가져오기
+  const modalStore = useModalStore();
   const reposted = !!post.Reposts?.find(
     (v) => v.userId === session?.user?.email
   );
@@ -426,6 +429,8 @@ export default function ActionButtons({ white, post }: Props) {
 
     // 어떤 포스트에 대한 답글인지 정보 보내주기
     // -> 컴포넌트 간 상태 공유
+    modalStore.setMode("comment"); // mode는 comment
+    modalStore.setData(post); // data로 post를 전달
 
     // /compose/tweet으로 이동
     router.push(`/compose/tweet`);
