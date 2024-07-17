@@ -75,62 +75,6 @@ export default function PostForm({ me }: Props) {
     setContent(e.target.value);
   };
 
-  // const onSubmit: FormEventHandler = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  //   formData.append("content", content);
-  //   preview.forEach((p) => {
-  //     // 이미지는 하나씩 꺼내 폼 데이터에 추가
-  //     p && formData.append("images", p?.file);
-  //   });
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`,
-  //       {
-  //         method: "post",
-  //         credentials: "include",
-  //         body: formData,
-  //       }
-  //     );
-  //     if (response.status === 201) {
-  //       // 포스팅 후 초기화
-  //       setContent("");
-  //       setPreview([]);
-
-  //       // 새로운 포스트 게시
-  //       const newPost = await response.json();
-  //       queryClient.setQueryData(
-  //         ["posts", "recommends"],
-  //         (prevData: { pages: Post[][] }) => {
-  //           const shallow = {
-  //             ...prevData,
-  //             pages: [...prevData.pages],
-  //           };
-  //           shallow.pages[0] = [...shallow.pages[0]];
-  //           shallow.pages[0].unshift(newPost);
-  //           return shallow;
-  //         }
-  //       );
-
-  //       // 팔로우 중 탭에서 작성 시
-  //       queryClient.setQueryData(
-  //         ["posts", "followings"],
-  //         (prevData: { pages: Post[][] }) => {
-  //           const shallow = {
-  //             ...prevData,
-  //             pages: [...prevData.pages],
-  //           };
-  //           shallow.pages[0] = [...shallow.pages[0]];
-  //           shallow.pages[0].unshift(newPost);
-  //           return shallow;
-  //         }
-  //       );
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   // 이미지 파일 추가 버튼
   const onClickButton = () => {
     imageRef.current?.click();
