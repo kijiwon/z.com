@@ -27,6 +27,8 @@ export default function LogoutButton({ me }: Props) {
         method: "post",
         credentials: "include",
       });
+      // router cache 초기화 -> 로그아웃 이후 로그인 시 사용자 정보 저장x
+      router.refresh();
       router.replace("/");
     });
   };
