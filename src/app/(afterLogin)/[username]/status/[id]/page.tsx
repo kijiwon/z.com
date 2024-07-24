@@ -29,18 +29,21 @@ export async function generateMetadata({ params }: Props) {
     openGraph: {
       title: `Z에서 ${user.nickname} 님 : ${post.content}`,
       description: post.content,
-      images: post.Images?.map((v) => ({
-        // post에 이미지가 있는 경우
-        url: `http://z.nodebird.com${v.link}`,
-        with: 400,
-        height: 400,
-      })) || [
-        {
-          url: `http://z.nodebird.com${user.image}`,
-          with: 400,
-          height: 400,
-        },
-      ],
+      images:
+        post.Images?.length > 0
+          ? post.Images?.map((v) => ({
+              // post에 이미지가 있는 경우
+              url: `http://z.nodebird.com${v.link}`,
+              with: 400,
+              height: 400,
+            }))
+          : [
+              {
+                url: `http://z.nodebird.com${user.image}`,
+                with: 400,
+                height: 400,
+              },
+            ],
     },
   };
 }
