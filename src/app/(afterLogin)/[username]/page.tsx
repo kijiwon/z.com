@@ -4,7 +4,6 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import style from "./profile.module.css";
-import BackButton from "@/app/(afterLogin)/_component/BackButton";
 import { getUserServer } from "./_lib/getUserServer";
 import { getUserPosts } from "./_lib/getUserPosts";
 import UserPosts from "./_component/UserPosts";
@@ -19,6 +18,17 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${user.nickname} (${user.id}) / Z`,
     description: `${user.nickname} (${user.id}) 프로필`,
+    openGraph: {
+      title: `${user.nickname} (${user.id}) / Z`,
+      description: `${user.nickname} (${user.id}) 프로필`,
+      images: [
+        {
+          url: `http://z.nodebird.com${user.image}`,
+          with: 400,
+          height: 400,
+        },
+      ],
+    },
   };
 }
 
