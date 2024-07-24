@@ -1,15 +1,22 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import Main from "../_component/Main";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import RedirectToLogin from "./_component/RedirectToLogin";
 
-export default function Login() {
-  const router = useRouter();
-  router.replace("/i/flow/login");
-
+export default async function Login() {
+  const session = await auth();
+  if (session?.user) {
+    redirect("/home");
+    // return null;
+  }
   // replace가 이루어지면 배경이 되는 children은 이 Login 컴포넌트가 됨
   // => Home 컴포넌트와 동일한 컴포넌트를 리턴
-  return <Main />;
+  return (
+    <>
+      <RedirectToLogin />
+      <Main />
+    </>
+  );
 }
 
 // push vs replace
