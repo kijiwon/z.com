@@ -1,14 +1,12 @@
 import { faker } from "@faker-js/faker";
 import style from "./chatRoom.module.css";
-import Link from "next/link";
-import BackButton from "../../_component/BackButton";
 import cx from "classnames";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import MessageForm from "./_component/MessageForm";
 import { auth } from "@/auth";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { getUserServer } from "../../[username]/_lib/getUserServer";
 import { UserInfo } from "./_component/UserInfo";
 
@@ -21,7 +19,7 @@ type Props = {
 
 export default async function ChatRoom({ params }: Props) {
   const session = await auth();
-  const queryClient = useQueryClient();
+  const queryClient = new QueryClient();
   // params를 -로 분리해 상대방의 id 가져오기
   const ids = params.room.split("-").filter((v) => v !== session?.user?.email);
   // 상대방 id가 없는 경우 처리
