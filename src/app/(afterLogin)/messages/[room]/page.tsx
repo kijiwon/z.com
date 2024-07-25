@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import style from "./chatRoom.module.css";
 import cx from "classnames";
 import dayjs from "dayjs";
@@ -30,11 +29,6 @@ export default async function ChatRoom({ params }: Props) {
     queryKey: ["users", ids[0]],
     queryFn: getUserServer,
   });
-  const user = {
-    id: "hero",
-    nickname: "영웅",
-    image: faker.image.avatar(),
-  };
 
   const messages = [
     {
