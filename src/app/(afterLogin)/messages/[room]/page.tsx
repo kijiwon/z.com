@@ -6,11 +6,31 @@ import cx from "classnames";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
+import MessageForm from "./_component/MessageForm";
+import { auth } from "@/auth";
+import { useQueryClient } from "@tanstack/react-query";
+import { getUserServer } from "../../[username]/_lib/getUserServer";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function ChatRoom() {
+type Props = {
+  params: { room: string };
+};
+
+export default async function ChatRoom({ params }: Props) {
+  const session = await auth();
+  const queryClient = useQueryClient();
+  // params를 -로 분리해 상대방의 id 가져오기
+  const ids = params.room.split("-").filter((v) => v !== session?.user?.email);
+  // 상대방 id가 없는 경우 처리
+  if (!ids[0]) {
+    return null;
+  }
+  await queryClient.prefetchQuery({
+    queryKey: ["users", ids[0]],
+    queryFn: getUserServer,
+  });
   const user = {
     id: "hero",
     nickname: "영웅",
@@ -71,6 +91,7 @@ export default function ChatRoom() {
           );
         })}
       </div>
+      <MessageForm />
     </main>
   );
 }

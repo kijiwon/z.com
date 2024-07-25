@@ -8,6 +8,7 @@ import { getUser } from "@/app/(afterLogin)/[username]/_lib/getUser";
 import cx from "classnames";
 import { MouseEventHandler } from "react";
 import { Session } from "@auth/core/types";
+import { useRouter } from "next/navigation";
 
 type Props = {
   username: string;
@@ -26,7 +27,7 @@ export default function UserInfo({ username, session }: Props) {
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });
-
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const follow = useMutation({
@@ -246,6 +247,13 @@ export default function UserInfo({ username, session }: Props) {
     return null;
   }
 
+  const onMessage = () => {
+    const ids = [session?.user?.email, user.id];
+    ids.sort();
+    // 주소는 -으로 연결
+    router.push(`/messages/${ids.join("-")}`);
+  };
+
   const followed = user?.Followers?.find((v) => v.id === session?.user?.email);
 
   const onFollow: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -276,12 +284,26 @@ export default function UserInfo({ username, session }: Props) {
           </div>
           {/* 로그인된 user와 다른 user인 경우에만 버튼 렌더링 */}
           {user.id !== session?.user?.email && (
-            <button
-              onClick={onFollow}
-              className={cx(style.followButton, followed && style.followed)}
-            >
-              {followed ? "팔로잉" : "팔로우"}
-            </button>
+            <>
+              <button onClick={onMessage} className={style.messageButton}>
+                <svg
+                  viewBox="0 0 24 24"
+                  width={18}
+                  aria-hidden="true"
+                  className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-z80fyv r-19wmn03"
+                >
+                  <g>
+                    <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
+                  </g>
+                </svg>
+              </button>
+              <button
+                onClick={onFollow}
+                className={cx(style.followButton, followed && style.followed)}
+              >
+                {followed ? "팔로잉" : "팔로우"}
+              </button>
+            </>
           )}
         </div>
         <div className={style.userFollower}>
