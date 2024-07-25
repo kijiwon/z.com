@@ -10,6 +10,7 @@ import MessageForm from "./_component/MessageForm";
 import { auth } from "@/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { getUserServer } from "../../[username]/_lib/getUserServer";
+import { UserInfo } from "./_component/UserInfo";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -56,19 +57,7 @@ export default async function ChatRoom({ params }: Props) {
 
   return (
     <main className={style.main}>
-      <div className={style.header}>
-        <BackButton />
-        <div>
-          <h2>{user.nickname}</h2>
-        </div>
-      </div>
-      <Link href={user.nickname} className={style.userInfo}>
-        <img src={user.image} alt={user.id} />
-        <div>
-          <b>{user.nickname}</b>
-        </div>
-        <div>@{user.id}</div>
-      </Link>
+      <UserInfo id={ids[0]} />
       <div className={style.list}>
         {messages.map((m, id) => {
           if (m.id === "zzionie") {
