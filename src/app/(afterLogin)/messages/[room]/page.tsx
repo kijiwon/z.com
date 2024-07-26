@@ -26,28 +26,11 @@ export default async function ChatRoom({ params }: Props) {
     queryFn: getUserServer,
   });
 
-  // const messages = [
-  //   {
-  //     messageId: 1,
-  //     roomId: 123,
-  //     id: "zzionie",
-  //     content: "안녕하세요.",
-  //     createdAt: new Date(),
-  //   },
-  //   {
-  //     messageId: 2,
-  //     roomId: 123,
-  //     id: "hero",
-  //     content: "안녕히가세요.",
-  //     createdAt: new Date(),
-  //   },
-  // ];
-
   return (
     <main className={style.main}>
       <WebSocketComponent />
       <UserInfo id={ids[0]} />
-      <MessageList />
+      <MessageList id={ids[0]} />
       <MessageForm id={ids[0]} />
     </main>
   );
