@@ -8,6 +8,7 @@ import { auth } from "@/auth";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { getUserServer } from "../../[username]/_lib/getUserServer";
 import { UserInfo } from "./_component/UserInfo";
+import WebSocketComponent from "./_component/WebSocketComponent";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
