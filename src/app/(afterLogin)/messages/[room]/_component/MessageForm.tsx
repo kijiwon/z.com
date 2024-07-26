@@ -9,10 +9,16 @@ import {
 import style from "./messageForm.module.css";
 import TextareaAutosize from "react-textarea-autosize";
 import useSocket from "../_lib/useSocket";
+import { useSession } from "next-auth/react";
 
-export default function MessageForm() {
+interface Props {
+  id: string;
+}
+
+export default function MessageForm({ id }: Props) {
   const [content, setContent] = useState("");
   const [socket] = useSocket();
+  const { data: session } = useSession();
 
   const onChangeContent: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
@@ -22,7 +28,11 @@ export default function MessageForm() {
     e.preventDefault();
     // socket.io를 이용해 채팅 구현
     // 메세지 보내기
-    socket?.emit("sendMessage");
+    socket?.emit("sendMessage", {
+      senderId: session?.user?.email,
+      receiverId: id,
+      content,
+    });
     setContent("");
   };
 
