@@ -3,9 +3,11 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import style from "./messageForm.module.css";
 import TextareaAutosize from "react-textarea-autosize";
+import useSocket from "../_lib/useSocket";
 
 export default function MessageForm() {
   const [content, setContent] = useState("");
+  const [socket] = useSocket();
 
   const onChangeContent: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.target.value);
