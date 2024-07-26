@@ -48,7 +48,7 @@ export default function MessageForm({ id }: Props) {
   return (
     <div className={style.formZone}>
       <form className={style.form} onSubmit={onSubmit}>
-        <TextareaAutosize onChange={onChangeContent} />
+        <TextareaAutosize value={content} onChange={onChangeContent} />
         <button
           className={style.submitButton}
           type="submit"
