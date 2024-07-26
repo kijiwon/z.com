@@ -1,6 +1,11 @@
 "use client";
 
-import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import style from "./messageForm.module.css";
 import TextareaAutosize from "react-textarea-autosize";
 import useSocket from "../_lib/useSocket";
@@ -16,7 +21,18 @@ export default function MessageForm() {
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     // socket.io를 이용해 채팅 구현
+    // 메세지 보내기
+    socket?.emit("sendMessage");
+    setContent("");
   };
+
+  useEffect(() => {
+    socket?.on("receiveMessage", () => {});
+    return () => {
+      socket?.off("receiveMessage");
+    };
+  }, []);
+
   return (
     <div className={style.formZone}>
       <form className={style.form} onSubmit={onSubmit}>

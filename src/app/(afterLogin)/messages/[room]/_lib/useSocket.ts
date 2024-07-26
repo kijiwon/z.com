@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client";
 // 공유할 데이터는 밖으로 빼기<- 공유 시 state가 매번 생성되기 때문
 let socket: Socket | null;
 
-export default function useSocket() {
+export default function useSocket(): [Socket | null, () => void] {
   // socket을 종료하는 함수
   const disconnect = useCallback(() => {
     socket?.disconnect();
