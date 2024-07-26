@@ -49,6 +49,7 @@ export default async function ChatRoom({ params }: Props) {
 
   return (
     <main className={style.main}>
+      <WebSocketComponent />
       <UserInfo id={ids[0]} />
       <div className={style.list}>
         {messages.map((m, id) => {
