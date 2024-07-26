@@ -15,6 +15,12 @@ export default function useSocket() {
     const socketResult = io(`${process.env.NEXT_PUBLIC_BASE_URL}/messages`, {
       transports: ["websocket"],
     });
+
+    // 에러처리
+    socketResult.on("connect_error", (err) => {
+      console.error(err);
+      console.log(`connect_error due to ${err.message}`);
+    });
     setSocket(socketResult);
   }, []);
 
