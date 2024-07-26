@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -5,6 +6,7 @@ import { io, Socket } from "socket.io-client";
 let socket: Socket | null;
 
 export default function useSocket(): [Socket | null, () => void] {
+  const { data: session } = useSession();
   // socket을 종료하는 함수
   const disconnect = useCallback(() => {
     socket?.disconnect();
@@ -25,7 +27,20 @@ export default function useSocket(): [Socket | null, () => void] {
         console.log(`connect_error due to ${err.message}`);
       });
     }
-  }, []);
+  }, [session]);
+
+  useEffect(() => {
+    if (socket?.connected && session?.user?.email) {
+      socket.emit("login", { id: session.user.email });
+      // socket연결 시 로그인(필수!)
+      socket.on("connect", () => {
+        console.log("websocket connected", socket, session?.user?.email);
+        if (session?.user?.email) {
+          socket?.emit("login", { id: session?.user?.email });
+        }
+      });
+    }
+  }, [session]);
 
   return [socket, disconnect];
 }

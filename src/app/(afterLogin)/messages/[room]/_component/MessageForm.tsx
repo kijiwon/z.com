@@ -33,6 +33,8 @@ export default function MessageForm({ id }: Props) {
       receiverId: id,
       content,
     });
+
+    // 리액트 쿼리 데이터에 추가
     setContent("");
   };
 
