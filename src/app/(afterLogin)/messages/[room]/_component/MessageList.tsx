@@ -32,6 +32,7 @@ export default function MessageList({ id }: Props) {
   const setGoDown = useMessageStore().setGoDown;
   const listRef = useRef<HTMLDivElement>(null);
   const [pageRendered, setPageRendered] = useState(false);
+  const [adjustingScroll, setAdjustingScroll] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -74,9 +75,27 @@ export default function MessageList({ id }: Props) {
 
   useEffect(() => {
     if (inView) {
-      !isFetching && hasPreviousPage && fetchPreviousPage();
+      if (!isFetching && hasPreviousPage && !adjustingScroll) {
+        // scroll 조정 중일 때는 메세지 불러오지 않기
+        const prevHeight = listRef.current?.scrollHeight || 0;
+        fetchPreviousPage().then(() => {
+          setAdjustingScroll(true);
+          setTimeout(() => {
+            console.log(
+              "prevHeight",
+              prevHeight,
+              listRef.current?.scrollHeight
+            );
+            if (listRef.current) {
+              listRef.current.scrollTop =
+                listRef.current.scrollHeight - prevHeight;
+              setAdjustingScroll(false);
+            }
+          }, 1000);
+        });
+      }
     }
-  }, [inView, isFetching, hasPreviousPage, fetchPreviousPage]);
+  }, [inView, isFetching, hasPreviousPage, fetchPreviousPage, adjustingScroll]);
 
   let hasMessages = !!messages;
   useEffect(() => {
@@ -138,7 +157,9 @@ export default function MessageList({ id }: Props) {
 
   return (
     <div className={style.list} ref={listRef}>
-      {pageRendered && <div ref={ref} style={{ height: 50 }} />}
+      {!adjustingScroll && pageRendered && (
+        <div ref={ref} style={{ height: 1 }} />
+      )}
       {messages?.pages.map((page) =>
         page.map((m) => {
           if (m.senderId === session?.user?.email) {
