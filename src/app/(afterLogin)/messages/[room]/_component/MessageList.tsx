@@ -12,7 +12,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { getMessages } from "../_lib/getMessages";
 import { useSession } from "next-auth/react";
 import { Message } from "@/model/Message";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 dayjs.locale("ko");
@@ -24,6 +24,9 @@ interface Props {
 
 export default function MessageList({ id }: Props) {
   const { data: session } = useSession();
+  const listRef = useRef<HTMLDivElement>(null);
+  const [pageRendered, setPageRendered] = useState(false);
+
   const {
     data: messages,
     isFetching,
@@ -68,9 +71,20 @@ export default function MessageList({ id }: Props) {
     }
   }, [inView, isFetching, hasPreviousPage, fetchPreviousPage]);
 
+  let hasMessages = !!messages;
+  useEffect(() => {
+    if (hasMessages) {
+      if (listRef.current) {
+        // 페이지 렌더링 시 최근 메세지로 스크롤 고정
+        listRef.current.scrollTop = listRef.current?.scrollHeight;
+      }
+      setPageRendered(true);
+    }
+  }, [hasMessages]);
+
   return (
-    <div className={style.list}>
-      <div ref={ref} style={{ height: 50 }} />
+    <div className={style.list} ref={listRef}>
+      {pageRendered && <div ref={ref} style={{ height: 50 }} />}
       {messages?.pages.map((page) =>
         page.map((m) => {
           if (m.senderId === session?.user?.email) {
