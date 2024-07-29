@@ -12,6 +12,7 @@ import useSocket from "../_lib/useSocket";
 import { useSession } from "next-auth/react";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { Message } from "@/model/Message";
+import { useMessageStore } from "@/store/message";
 
 interface Props {
   id: string;
@@ -19,6 +20,7 @@ interface Props {
 
 export default function MessageForm({ id }: Props) {
   const [content, setContent] = useState("");
+  const setGoDown = useMessageStore().setGoDown;
   const [socket] = useSocket();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
@@ -76,7 +78,10 @@ export default function MessageForm({ id }: Props) {
         ],
         newMessages
       );
+      // 새 메세지 전송 시 스크롤 내리기
+      setGoDown(true);
     }
+
     setContent("");
   };
 

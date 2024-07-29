@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { Message } from "@/model/Message";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { useMessageStore } from "@/store/message";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -24,6 +25,8 @@ interface Props {
 
 export default function MessageList({ id }: Props) {
   const { data: session } = useSession();
+  const shouldGoDown = useMessageStore().shouldGoDown;
+  const setGoDown = useMessageStore().setGoDown;
   const listRef = useRef<HTMLDivElement>(null);
   const [pageRendered, setPageRendered] = useState(false);
 
@@ -81,6 +84,15 @@ export default function MessageList({ id }: Props) {
       setPageRendered(true);
     }
   }, [hasMessages]);
+
+  useEffect(() => {
+    if (shouldGoDown) {
+      if (listRef.current) {
+        listRef.current.scrollTop = listRef.current?.scrollHeight;
+        setGoDown(false);
+      }
+    }
+  }, [setGoDown, shouldGoDown]);
 
   return (
     <div className={style.list} ref={listRef}>
