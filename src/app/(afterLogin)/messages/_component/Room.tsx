@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import { Room } from "@/model/Room";
+import { useSession } from "next-auth/react";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -16,7 +17,11 @@ type Props = {
 
 export default function Room({ room }: Props) {
   const router = useRouter();
+  const { data: session } = useSession();
 
+  // 메세지 받는 사람 구분하기
+  const user =
+    room.Receiver.id === session?.user?.email ? room.Sender : room.Receiver;
   const onClick = () => {
     router.push(`/messages/${room.room}`);
   };
