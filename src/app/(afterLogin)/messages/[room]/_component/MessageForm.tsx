@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ChangeEventHandler,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import style from "./messageForm.module.css";
 import TextareaAutosize from "react-textarea-autosize";
 import useSocket from "../_lib/useSocket";
@@ -84,13 +79,6 @@ export default function MessageForm({ id }: Props) {
 
     setContent("");
   };
-
-  useEffect(() => {
-    socket?.on("receiveMessage", () => {});
-    return () => {
-      socket?.off("receiveMessage");
-    };
-  }, []);
 
   return (
     <div className={style.formZone}>

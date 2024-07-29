@@ -4,6 +4,7 @@ import {
   DefaultError,
   InfiniteData,
   useInfiniteQuery,
+  useQueryClient,
 } from "@tanstack/react-query";
 import style from "../chatRoom.module.css";
 import cx from "classnames";
@@ -15,6 +16,7 @@ import { Message } from "@/model/Message";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useMessageStore } from "@/store/message";
+import useSocket from "../_lib/useSocket";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -25,10 +27,12 @@ interface Props {
 
 export default function MessageList({ id }: Props) {
   const { data: session } = useSession();
+
   const shouldGoDown = useMessageStore().shouldGoDown;
   const setGoDown = useMessageStore().setGoDown;
   const listRef = useRef<HTMLDivElement>(null);
   const [pageRendered, setPageRendered] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     data: messages,
@@ -93,6 +97,44 @@ export default function MessageList({ id }: Props) {
       }
     }
   }, [setGoDown, shouldGoDown]);
+
+  const [socket] = useSocket();
+  useEffect(() => {
+    socket?.on("receiveMessage", (data) => {
+      console.log("data", data);
+      // 리액트 쿼리 데이터에 추가
+      const exMessages = queryClient.getQueryData([
+        "rooms",
+        {
+          senderId: session?.user?.email,
+          receiverId: id,
+        },
+        "messages",
+      ]) as InfiniteData<Message[]>;
+      if (exMessages && typeof exMessages === "object") {
+        const newMessages = {
+          ...exMessages,
+          pages: [...exMessages.pages],
+        };
+        const lastPage = newMessages.pages.at(-1);
+        const newLastPage = lastPage ? [...lastPage] : [];
+        newLastPage.push(data);
+        newMessages.pages[newMessages.pages.length - 1] = newLastPage;
+        queryClient.setQueryData(
+          [
+            "rooms",
+            { senderId: session?.user?.email, receiverId: id },
+            "messages",
+          ],
+          newMessages
+        );
+        setGoDown(true);
+      }
+    });
+    return () => {
+      socket?.off("receiveMessage");
+    };
+  }, [socket]);
 
   return (
     <div className={style.list} ref={listRef}>
